@@ -66,11 +66,13 @@ void handle_joystick_motion(Input *input, SDL_JoyAxisEvent event) {
   switch (event.axis) {
   case JOYSTICK_X_AXIS:
     input->direction.x =
-        event.value / SDL_JOYSTICK_AXIS_MAX; // Normalize to -1.0 ~ 1.0
+        (float)event.value /
+        (float)SDL_JOYSTICK_AXIS_MAX; // Normalize to -1.0 ~ 1.0
     break;
   case JOYSTICK_Y_AXIS:
     input->direction.y =
-        event.value / SDL_JOYSTICK_AXIS_MAX; // Normalize to -1.0 ~ 1.0
+        (float)event.value /
+        (float)SDL_JOYSTICK_AXIS_MAX; // Normalize to -1.0 ~ 1.0
     break;
   }
 }
