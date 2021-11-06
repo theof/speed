@@ -12,10 +12,10 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} include)
 
 add_executable(speed
-	src/main.c
+  src/main.c
 	src/vector_2d.c
 	src/level_file_parser.c
   src/player.c
-  src/physical_input.c
+  src/input.c
 )
 target_link_libraries(speed ${SDL2_LIBRARIES})
