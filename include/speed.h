@@ -1,6 +1,7 @@
 #pragma once
 #define SPEED 42
 
+#include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -23,6 +24,14 @@ typedef struct S_Player {
   Vector_2d *speed;
   bool casting;
   float cast_delta;
+  float cast_speed_mod;
 } Player;
+typedef enum E_Direction {
+  BOTTOM,
+  TOP,
+  LEFT,
+  RIGHT,
+  NEUTRAL,
+} Direction;
 Player *new_player();
 void destroy_player(Player *player);
