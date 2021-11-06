@@ -99,7 +99,7 @@ void update_input(Input *input, SDL_Event *event) {
     handle_button_down(input, event->jbutton);
     break;
   case SDL_JOYBUTTONUP:
-    handle_joystick_uo(input, event->jbutton);
+    handle_button_up(input, event->jbutton);
     break;
   }
 }
