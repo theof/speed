@@ -18,6 +18,18 @@ Vector_2d *new_vector_2d(float x, float y);
 void destroy_vector_2d(Vector_2d *vector);
 
 /*
+ * physical_input.c
+ * abstraction layer to read human inputs
+ */
+typedef struct S_Input {
+  Vector_2d direction; // all values should be normalized between -1.0 and 1.0
+  bool action;
+} Input;
+Input *new_input();
+void destroy_input(Input *input);
+void update_input(Input *input, SDL_Event *event);
+
+/*
  * Player.c
  */
 typedef struct S_Player {
@@ -37,19 +49,7 @@ typedef enum E_Direction {
 Player *new_player();
 void destroy_player(Player *player);
 void draw_player(Player *player, SDL_Surface *surface);
-void update_player(Player *player, Uint32 millis_elapsed);
-
-/*
- * physical_input.c
- * abstraction layer to read human inputs
- */
-typedef struct S_Input {
-  Vector_2d direction; // all values should be normalized between -1.0 and 1.0
-  bool action;
-} Input;
-Input *new_input();
-void destroy_input(Input *input);
-void update_input(Input *input, SDL_Event *event);
+void update_player(Player *player, Uint32 millis_elapsed, Input *input);
 
 typedef struct S_Point {
   int x;

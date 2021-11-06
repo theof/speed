@@ -28,9 +28,9 @@ void draw_player(Player *player, SDL_Surface *surface) {
   SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 0x00, 0xFF, 0xFF));
 }
 
-void update_player(Player *player, Uint32 millis_elapsed) {
-  player->position.x += 0.1 * millis_elapsed;
-  player->position.y += 0.1 * millis_elapsed;
+void update_player(Player *player, Uint32 delta_millis, Input *input) {
+  player->position.x += 0.3 * input->direction.x * delta_millis;
+  player->position.y += 0.3 * input->direction.y * delta_millis;
 }
 
 void start_to_cast(Player *player) { player->casting = true; }

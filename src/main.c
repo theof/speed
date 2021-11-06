@@ -21,7 +21,7 @@ void draw(SDL_Window *window, SDL_Surface *screenSurface, Player *player) {
   SDL_UpdateWindowSurface(window);
 }
 
-void handle_event(SDL_Event *ev, bool *game_is_still_running) {
+void handle_event(SDL_Event *ev, bool *game_is_still_running, Input *input) {
   switch (ev->type) {
   case SDL_WINDOWEVENT:
     switch (ev->window.event) {
@@ -38,6 +38,7 @@ void handle_event(SDL_Event *ev, bool *game_is_still_running) {
     }
     break;
   }
+  update_input(input, ev);
 }
 
 int main(int argc, char *args[]) {
@@ -65,17 +66,18 @@ int main(int argc, char *args[]) {
   Uint32 new_frame_ts;
   Uint32 millis_elapsed;
   bool game_is_still_running = true;
+  Input *input = new_input();
   while (game_is_still_running) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // poll until all events are handled!
-      handle_event(&event, &game_is_still_running);
+      handle_event(&event, &game_is_still_running, input);
     }
 
     // update game state, draw the current frame
     new_frame_ts = SDL_GetTicks();
     millis_elapsed = new_frame_ts - last_frame_ts; // XXX might overflow
     printf("%d\n", millis_elapsed);
-    update_player(player, millis_elapsed);
+    update_player(player, millis_elapsed, input);
     draw(window, screenSurface, player);
     last_frame_ts = new_frame_ts;
   }
