@@ -2,6 +2,9 @@
 // This should display a white screen for 2 seconds
 // compile with: clang++ main.cpp -o hello_sdl2 -lSDL2
 // run with: ./hello_sdl2
+#include "SDL_stdinc.h"
+#include "SDL_timer.h"
+#include "SDL_video.h"
 #include "speed.h"
 #include <SDL2/SDL.h>
 #include <stdbool.h>
@@ -58,6 +61,9 @@ int main(int argc, char *args[]) {
   }
   screenSurface = SDL_GetWindowSurface(window);
 
+  Uint32 last_frame_ts = SDL_GetTicks();
+  Uint32 new_frame_ts;
+  Uint32 millis_elapsed;
   bool game_is_still_running = true;
   while (game_is_still_running) {
     SDL_Event event;
@@ -66,8 +72,12 @@ int main(int argc, char *args[]) {
     }
 
     // update game state, draw the current frame
+    new_frame_ts = SDL_GetTicks();
+    millis_elapsed = new_frame_ts - last_frame_ts; // XXX might overflow
+    printf("%d\n", millis_elapsed);
+    update_player(player, millis_elapsed);
     draw(window, screenSurface, player);
-    SDL_Delay(100);
+    last_frame_ts = new_frame_ts;
   }
 
   SDL_DestroyWindow(window);
