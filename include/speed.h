@@ -41,15 +41,12 @@ void destroy_player(Player *player);
  * abstraction layer to read human inputs
  */
 typedef struct S_Input {
-  float left;
-  float right;
-  float bottom;
-  float up;
+  Vector_2d direction; // all values should be normalized between -1.0 and 1.0
   bool action;
   float action_delta; // amount of time the action button was pressed down
 } Input;
-void new_input();
-void destroy_input();
+Input *new_input();
+void destroy_input(Input *input);
 void update_input(Input *input, SDL_Event *event);
 
 typedef struct S_Point {

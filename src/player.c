@@ -21,18 +21,23 @@ void _apply_cast(Direction direction) {
   switch (direction) {
   case BOTTOM: {
     printf("Bottom Cast");
+    break;
   }
   case TOP: {
     printf("Top Cast");
+    break;
   }
   case LEFT: {
     printf("Left Cast");
+    break;
   }
   case RIGHT: {
     printf("Right Cast");
+    break;
   }
   case NEUTRAL: {
     printf("Neutral Cast");
+    break;
   }
   }
 }
