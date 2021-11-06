@@ -68,15 +68,16 @@ typedef struct S_End {
 
 typedef struct S_Lever {
 	Point		position;
+	bool		activated;
 } Lever;
 
 typedef struct S_Level {
 	int			wall_count;
 	Wall**		walls;
 	int			lever_count;
-	Lever**		levels;
-	Start		start;
-	End			end;
+	Lever**		levers;
+	Start		*start;
+	End			*end;
 } Level;
 
 void parse_level(char* filename);
