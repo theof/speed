@@ -1,3 +1,2 @@
-- change joystick events to gamepad events
-- fix keyboard (opposite directions)
+- figure out why gamepads are not detected :(
 
