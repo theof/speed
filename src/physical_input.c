@@ -6,7 +6,6 @@ Input *new_input() {
   input->direction.x = 0.0;
   input->direction.y = 0.0;
   input->action = false;
-  input->action_delta = 0.0;
   return input;
 }
 
@@ -26,6 +25,9 @@ void handle_keydown(SDL_Keycode keycode, Input *input) {
   case SDLK_DOWN:
     input->direction.y = 1.0;
     break;
+  case SDLK_SPACE:
+    input->action = true;
+    break;
   }
 }
 
@@ -42,6 +44,9 @@ void handle_keyup(SDL_Keycode keycode, Input *input) {
     break;
   case SDLK_UP:
     input->direction.y = 0.0;
+    break;
+  case SDLK_SPACE:
+    input->action = false;
     break;
   }
 }

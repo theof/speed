@@ -43,7 +43,6 @@ void destroy_player(Player *player);
 typedef struct S_Input {
   Vector_2d direction; // all values should be normalized between -1.0 and 1.0
   bool action;
-  float action_delta; // amount of time the action button was pressed down
 } Input;
 Input *new_input();
 void destroy_input(Input *input);
