@@ -1,4 +1,5 @@
 #pragma once
+#include "SDL_stdinc.h"
 #define SPEED 42
 
 #include <SDL2/SDL.h>
@@ -17,11 +18,23 @@ Vector_2d *new_vector_2d(float x, float y);
 void destroy_vector_2d(Vector_2d *vector);
 
 /*
- * Player controler
+ * physical_input.c
+ * abstraction layer to read human inputs
+ */
+typedef struct S_Input {
+  Vector_2d direction; // all values should be normalized between -1.0 and 1.0
+  bool action;
+} Input;
+Input *new_input();
+void destroy_input(Input *input);
+void update_input(Input *input, SDL_Event *event);
+
+/*
+ * Player.c
  */
 typedef struct S_Player {
-  Vector_2d *position;
-  Vector_2d *speed;
+  Vector_2d position;
+  Vector_2d speed;
   bool casting;
   float cast_delta;
   float cast_speed_mod;
@@ -35,6 +48,8 @@ typedef enum E_Direction {
 } Direction;
 Player *new_player();
 void destroy_player(Player *player);
+void draw_player(Player *player, SDL_Surface *surface);
+void update_player(Player *player, Uint32 millis_elapsed, Input *input);
 
 typedef struct S_Point {
   int x;
@@ -61,6 +76,7 @@ typedef struct S_End {
 typedef struct S_Lever {
   Point position;
   bool activated;
+
 } Lever;
 
 typedef struct S_Level {

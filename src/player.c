@@ -1,20 +1,36 @@
+#include "SDL_rect.h"
+#include "SDL_surface.h"
 #include "speed.h"
 
 Player *new_player() {
   Player *player = (Player *)malloc(sizeof(Player));
 
-  player->position = new_vector_2d(0.0, 0.0);
-  player->speed = new_vector_2d(0.0, 0.0);
+  player->position.x = 0.0;
+  player->position.y = 0.0;
+  player->speed.x = 0.0;
+  player->speed.y = 0.0;
   player->casting = false;
   player->cast_delta = 0.0;
   player->cast_speed_mod = 0.1;
   return player;
 }
 
-void destroy_player(Player *player) {
-  destroy_vector_2d(player->position);
-  destroy_vector_2d(player->speed);
-  free(player);
+void destroy_player(Player *player) { free(player); }
+
+void draw_player(Player *player, SDL_Surface *surface) {
+  SDL_Rect rect;
+
+  rect.h = 32;
+  rect.w = 32;
+  rect.x = player->position.x;
+  rect.y = player->position.y;
+
+  SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 0x00, 0xFF, 0xFF));
+}
+
+void update_player(Player *player, Uint32 delta_millis, Input *input) {
+  player->position.x += 0.3 * input->direction.x * delta_millis;
+  player->position.y += 0.3 * input->direction.y * delta_millis;
 }
 
 void start_to_cast(Player *player) { player->casting = true; }
@@ -23,18 +39,23 @@ void _apply_cast(Direction direction) {
   switch (direction) {
   case BOTTOM: {
     printf("Bottom Cast");
+    break;
   }
   case TOP: {
     printf("Top Cast");
+    break;
   }
   case LEFT: {
     printf("Left Cast");
+    break;
   }
   case RIGHT: {
     printf("Right Cast");
+    break;
   }
   case NEUTRAL: {
     printf("Neutral Cast");
+    break;
   }
   }
 }
