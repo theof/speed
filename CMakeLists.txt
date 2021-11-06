@@ -11,7 +11,5 @@ project(speed)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} include)
 
-add_executable(speed src/main.c)
-add_executable(speed src/character.c)
-add_executable(speed src/vector_2d.c)
+add_executable(speed src/main.c src/character_movement.c src/vector_2d.c)
 target_link_libraries(speed ${SDL2_LIBRARIES})

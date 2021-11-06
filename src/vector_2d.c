@@ -7,3 +7,5 @@ Vector_2d *new_vector_2d(float x, float y) {
   vector->y = y;
   return vector;
 }
+
+void destroy_vector_2d(Vector_2d *vector) { free(vector); }
