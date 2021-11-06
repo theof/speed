@@ -1,10 +1,6 @@
 #include "speed.h"
 
-// TODO got to determine the correct button
-#define ACTION_BUTTON (Uint8)0
-
-#define JOYSTICK_X_AXIS (Uint8)0
-#define JOYSTICK_Y_AXIS (Uint8)1
+#define Sint16Max 32767
 
 void handle_keydown(SDL_Keycode keycode, Input *input) {
   switch (keycode) {
@@ -29,16 +25,20 @@ void handle_keydown(SDL_Keycode keycode, Input *input) {
 void handle_keyup(SDL_Keycode keycode, Input *input) {
   switch (keycode) {
   case SDLK_LEFT:
-    input->direction.x = 0.0;
+    if (input->direction.x < 0)
+      input->direction.x = 0.0;
     break;
   case SDLK_RIGHT:
-    input->direction.x = 0.0;
-    break;
-  case SDLK_DOWN:
-    input->direction.y = 0.0;
+    if (input->direction.x > 0)
+      input->direction.x = 0.0;
     break;
   case SDLK_UP:
-    input->direction.y = 0.0;
+    if (input->direction.y < 0)
+      input->direction.y = 0.0;
+    break;
+  case SDLK_DOWN:
+    if (input->direction.y > 0)
+      input->direction.y = 0.0;
     break;
   case SDLK_SPACE:
     input->action = false;
@@ -46,35 +46,38 @@ void handle_keyup(SDL_Keycode keycode, Input *input) {
   }
 }
 
-void handle_button_up(Input *input, SDL_JoyButtonEvent event) {
+void handle_button_up(Input *input, SDL_ControllerButtonEvent event) {
   switch (event.button) {
-  case ACTION_BUTTON:
+  case SDL_CONTROLLER_BUTTON_A:
     input->action = true;
     break;
   }
 }
 
-void handle_button_down(Input *input, SDL_JoyButtonEvent event) {
+void handle_button_down(Input *input, SDL_ControllerButtonEvent event) {
   switch (event.button) {
-  case ACTION_BUTTON:
+  case SDL_CONTROLLER_BUTTON_A:
     input->action = false;
     break;
   }
 }
 
-void handle_joystick_motion(Input *input, SDL_JoyAxisEvent event) {
+void handle_controller_motion(Input *input, SDL_ControllerAxisEvent event) {
   switch (event.axis) {
-  case JOYSTICK_X_AXIS:
+  case SDL_CONTROLLER_AXIS_LEFTX:
     input->direction.x =
-        (float)event.value /
-        (float)SDL_JOYSTICK_AXIS_MAX; // Normalize to -1.0 ~ 1.0
+        (float)event.value / (float)Sint16Max; // Normalize to -1.0 ~ 1.0
     break;
-  case JOYSTICK_Y_AXIS:
+  case SDL_CONTROLLER_AXIS_LEFTY:
     input->direction.y =
-        (float)event.value /
-        (float)SDL_JOYSTICK_AXIS_MAX; // Normalize to -1.0 ~ 1.0
+        (float)event.value / (float)Sint16Max; // Normalize to -1.0 ~ 1.0
     break;
   }
+}
+
+void init_gamepad(Input *input,
+                  SDL_ControllerDeviceEvent controler_device_event) {
+  input->controller = SDL_GameControllerOpen(controler_device_event.which);
 }
 
 Input *new_input() {
@@ -83,10 +86,21 @@ Input *new_input() {
   input->direction.x = 0.0;
   input->direction.y = 0.0;
   input->action = false;
+  // Wait for event to assign
+  input->controller = NULL;
   return input;
 }
 
-void destroy_input(Input *input) { free(input); }
+void destroy_input(Input *input) {
+  if (input->controller != NULL)
+    SDL_GameControllerClose(input->controller);
+  free(input);
+}
+
+void detect_controlers(Input *input, SDL_Event *event) {
+  if (event->type == SDL_CONTROLLERDEVICEADDED)
+    init_gamepad(input, event->cdevice);
+}
 
 void update_input(Input *input, SDL_Event *event) {
   switch (event->type) {
@@ -97,13 +111,13 @@ void update_input(Input *input, SDL_Event *event) {
     handle_keyup(event->key.keysym.sym, input);
     break;
   case SDL_JOYAXISMOTION:
-    handle_joystick_motion(input, event->jaxis);
+    handle_controller_motion(input, event->caxis);
     break;
-  case SDL_JOYBUTTONDOWN:
-    handle_button_down(input, event->jbutton);
+  case SDL_CONTROLLERBUTTONDOWN:
+    handle_button_down(input, event->cbutton);
     break;
-  case SDL_JOYBUTTONUP:
-    handle_button_up(input, event->jbutton);
+  case SDL_CONTROLLERBUTTONUP:
+    handle_button_up(input, event->cbutton);
     break;
   }
 }

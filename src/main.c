@@ -18,6 +18,7 @@ void draw(SDL_Window *window, SDL_Surface *screenSurface, Player *player) {
 }
 
 void handle_event(SDL_Event *ev, bool *game_is_still_running, Input *input) {
+  detect_controlers(input, ev);
   switch (ev->type) {
   case SDL_WINDOWEVENT:
     switch (ev->window.event) {
@@ -67,7 +68,7 @@ int main(int argc, char *args[]) {
   SDL_Window *window = NULL;
   SDL_Surface *screenSurface = NULL;
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO || SDL_INIT_GAMECONTROLLER) < 0) {
     fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
     return 1;
   }

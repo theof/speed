@@ -24,10 +24,12 @@ void destroy_vector_2d(Vector_2d *vector);
 typedef struct S_Input {
   Vector_2d direction; // all values should be normalized between -1.0 and 1.0
   bool action;
+  SDL_GameController *controller;
 } Input;
 Input *new_input();
 void destroy_input(Input *input);
 void update_input(Input *input, SDL_Event *event);
+void detect_controlers(Input *input, SDL_Event *event);
 
 /*
  * Player.c
