@@ -1,5 +1,8 @@
 #include "speed.h"
 
+// TODO got to determine the correct button
+#define ACTION_BUTTON (Uint8)0
+
 #define JOYSTICK_X_AXIS (Uint8)0
 #define JOYSTICK_Y_AXIS (Uint8)1
 
@@ -43,6 +46,22 @@ void handle_keyup(SDL_Keycode keycode, Input *input) {
   }
 }
 
+void handle_button_up(Input *input, SDL_JoyButtonEvent event) {
+  switch (event.button) {
+  case ACTION_BUTTON:
+    input->action = true;
+    break;
+  }
+}
+
+void handle_button_down(Input *input, SDL_JoyButtonEvent event) {
+  switch (event.button) {
+  case ACTION_BUTTON:
+    input->action = false;
+    break;
+  }
+}
+
 void handle_joystick_motion(Input *input, SDL_JoyAxisEvent event) {
   switch (event.axis) {
   case JOYSTICK_X_AXIS:
@@ -75,6 +94,12 @@ void update_input(Input *input, SDL_Event *event) {
     break;
   case SDL_JOYAXISMOTION:
     handle_joystick_motion(input, event->jaxis);
+    break;
+  case SDL_JOYBUTTONDOWN:
+    handle_button_down(input, event->jbutton);
+    break;
+  case SDL_JOYBUTTONUP:
+    handle_joystick_uo(input, event->jbutton);
     break;
   }
 }
