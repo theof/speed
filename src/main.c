@@ -11,9 +11,10 @@
 
 #define SCREEN_HEIGHT 480
 
-void draw(SDL_Window *window, SDL_Surface *screenSurface) {
+void draw(SDL_Window *window, SDL_Surface *screenSurface, Player *player) {
   SDL_FillRect(screenSurface, NULL,
                SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+  draw_player(player, screenSurface);
   SDL_UpdateWindowSurface(window);
 }
 
@@ -42,6 +43,7 @@ int main(int argc, char *args[]) {
 
   SDL_Window *window = NULL;
   SDL_Surface *screenSurface = NULL;
+  Player *player = new_player();
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
@@ -64,7 +66,7 @@ int main(int argc, char *args[]) {
     }
 
     // update game state, draw the current frame
-    draw(window, screenSurface);
+    draw(window, screenSurface, player);
     SDL_Delay(100);
   }
 
