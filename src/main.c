@@ -1,7 +1,3 @@
-// SDL2 Hello, World!
-// This should display a white screen for 2 seconds
-// compile with: clang++ main.cpp -o hello_sdl2 -lSDL2
-// run with: ./hello_sdl2
 #include "SDL_stdinc.h"
 #include "SDL_timer.h"
 #include "SDL_video.h"
@@ -41,27 +37,8 @@ void handle_event(SDL_Event *ev, bool *game_is_still_running, Input *input) {
   update_input(input, ev);
 }
 
-int main(int argc, char *args[]) {
-
-  parse_level("hellow.csv");
-
-  SDL_Window *window = NULL;
-  SDL_Surface *screenSurface = NULL;
+void loop(SDL_Window *window, SDL_Surface *surface) {
   Player *player = new_player();
-
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
-    return 1;
-  }
-  window = SDL_CreateWindow("hello_sdl2", SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                            SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-  if (window == NULL) {
-    fprintf(stderr, "could not create window: %s\n", SDL_GetError());
-    return 1;
-  }
-  screenSurface = SDL_GetWindowSurface(window);
-
   Uint32 last_frame_ts = SDL_GetTicks();
   Uint32 new_frame_ts;
   Uint32 millis_elapsed;
@@ -76,11 +53,34 @@ int main(int argc, char *args[]) {
     // update game state, draw the current frame
     new_frame_ts = SDL_GetTicks();
     millis_elapsed = new_frame_ts - last_frame_ts; // XXX might overflow
-    printf("%d\n", millis_elapsed);
     update_player(player, millis_elapsed, input);
-    draw(window, screenSurface, player);
+    draw(window, surface, player);
     last_frame_ts = new_frame_ts;
+    SDL_Delay(10);
   }
+}
+
+int main(int argc, char *args[]) {
+
+  parse_level("hellow.csv");
+
+  SDL_Window *window = NULL;
+  SDL_Surface *screenSurface = NULL;
+
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
+    return 1;
+  }
+  window = SDL_CreateWindow("hello_sdl2", SDL_WINDOWPOS_UNDEFINED,
+                            SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                            SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  if (window == NULL) {
+    fprintf(stderr, "could not create window: %s\n", SDL_GetError());
+    return 1;
+  }
+  screenSurface = SDL_GetWindowSurface(window);
+
+  loop(window, screenSurface);
 
   SDL_DestroyWindow(window);
   SDL_Quit();
