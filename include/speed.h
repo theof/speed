@@ -88,3 +88,6 @@ typedef struct S_Level {
 } Level;
 
 void parse_level(char *filename);
+
+void draw_player(Player *player, SDL_Surface *surface);
+Player *new_player();

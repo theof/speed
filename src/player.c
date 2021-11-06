@@ -1,3 +1,5 @@
+#include "SDL_rect.h"
+#include "SDL_surface.h"
 #include "speed.h"
 
 Player *new_player() {
@@ -14,6 +16,17 @@ Player *new_player() {
 }
 
 void destroy_player(Player *player) { free(player); }
+
+void draw_player(Player *player, SDL_Surface *surface) {
+  SDL_Rect rect;
+
+  rect.h = 32;
+  rect.w = 32;
+  rect.x = player->position.x;
+  rect.y = player->position.y;
+
+  SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 0x00, 0xFF, 0xFF));
+}
 
 void start_to_cast(Player *player) { player->casting = true; }
 
