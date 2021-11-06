@@ -1,4 +1,5 @@
 #pragma once
+#include "SDL_stdinc.h"
 #define SPEED 42
 
 #include <SDL2/SDL.h>
@@ -35,6 +36,8 @@ typedef enum E_Direction {
 } Direction;
 Player *new_player();
 void destroy_player(Player *player);
+void draw_player(Player *player, SDL_Surface *surface);
+void update_player(Player *player, Uint32 millis_elapsed);
 
 /*
  * physical_input.c
@@ -84,6 +87,3 @@ typedef struct S_Level {
 } Level;
 
 void parse_level(char *filename);
-
-void draw_player(Player *player, SDL_Surface *surface);
-Player *new_player();
