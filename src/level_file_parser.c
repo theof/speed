@@ -68,77 +68,73 @@ Wall *build_wall(char *line) {
   return wall;
 }
 
-void add_wall(Wall* wall, Level* level) {
-	int i = 0;
+void add_wall(Wall *wall, Level *level) {
+  int i = 0;
 
-	while (level->walls[i] != NULL) {
-		i += 1;
-	}
-	level->walls[i] = wall;
-	printf("Added wall #%d\n", i);
+  while (level->walls[i] != NULL) {
+    i += 1;
+  }
+  level->walls[i] = wall;
+  printf("Added wall #%d\n", i);
 }
 
 Lever *build_lever(char *line) {
-	Lever *lever = malloc(sizeof(Lever));
-	Point point;
+  Lever *lever = malloc(sizeof(Lever));
+  Point point;
 
-	point.y = atoi(strtok(line, ","));
-	point.x = atoi(strtok(NULL, ","));
-	lever->position = point;
-	lever->activated = false;
+  point.y = atoi(strtok(line, ","));
+  point.x = atoi(strtok(NULL, ","));
+  lever->position = point;
+  lever->activated = false;
 
-	printf("Lever (%d,%d) on:%s\n", lever->position.y, lever->position.x, lever->activated?"true":"false");
-	return lever;
+  printf("Lever (%d,%d) on:%s\n", lever->position.y, lever->position.x,
+         lever->activated ? "true" : "false");
+  return lever;
 }
 
-void add_lever(Lever* lever, Level* level) {
-	int i = 0;
+void add_lever(Lever *lever, Level *level) {
+  int i = 0;
 
-	while (level->levers[i] != NULL) {
-		i += 1;
-	}
-	level->levers[i] = lever;
-	printf("Added lever #%d\n", i);	
+  while (level->levers[i] != NULL) {
+    i += 1;
+  }
+  level->levers[i] = lever;
+  printf("Added lever #%d\n", i);
 }
 
-End	*build_end(char*line) {
-	End *end = malloc(sizeof(End));
-	Point point;
+End *build_end(char *line) {
+  End *end = malloc(sizeof(End));
+  Point point;
 
-	point.x = atoi(strtok(line, ","));
-	point.y = atoi(strtok(NULL, ","));
-	end->position = point;
+  point.x = atoi(strtok(line, ","));
+  point.y = atoi(strtok(NULL, ","));
+  end->position = point;
 
-	printf("End (%d,%d)\n", end->position.x, end->position.y);
-	return end;
+  printf("End (%d,%d)\n", end->position.x, end->position.y);
+  return end;
 }
 
-void add_end(End* end, Level *level) {
-	level->end = end;
+void add_end(End *end, Level *level) { level->end = end; }
+
+Start *build_start(char *line) {
+  Start *start = malloc(sizeof(Start));
+  Point point;
+
+  point.x = atoi(strtok(line, ","));
+  point.y = atoi(strtok(NULL, ","));
+  start->position = point;
+
+  printf("Start (%d,%d)\n", start->position.x, start->position.y);
+  return start;
 }
 
-Start* build_start(char* line) {
-	Start* start = malloc(sizeof(Start));
-	Point point;
-
-	point.x = atoi(strtok(line, ","));
-	point.y = atoi(strtok(NULL, ","));
-	start->position = point;
-
-	printf("Start (%d,%d)\n", start->position.x, start->position.y);
-	return start;
-}
-
-void add_start(Start *start, Level *level) {
-	level->start = start;
-}
+void add_start(Start *start, Level *level) { level->start = start; }
 
 void build_level(Level *level, char *full_path) {
   FILE *fptr;
   size_t len = 0;
   ssize_t read;
   char *line = NULL;
-  
 
   fptr = open_csv(full_path);
   while ((read = getline(&line, &len, fptr)) != -1) {
@@ -147,35 +143,35 @@ void build_level(Level *level, char *full_path) {
     if (strstr(line, "wall") != NULL) {
       add_wall(build_wall(line), level);
     } else if (strstr(line, "lever") != NULL) {
-	  add_lever(build_lever(line), level);
+      add_lever(build_lever(line), level);
     } else if (strstr(line, "end") != NULL) {
       add_end(build_end(line), level);
     } else if (strstr(line, "start") != NULL) {
-	  add_start(build_start(line), level);
+      add_start(build_start(line), level);
     } else {
-    	printf("Dafuk ???\n");
+      printf("Dafuk ???\n");
     }
   }
   free(line);
   pclose(fptr);
 }
 
-void destroy_level(Level* level) {
-	int i;
+void destroy_level(Level *level) {
+  int i;
 
-	for (i=0; i < level->wall_count; i+= 1) {
-		free(level->walls[i]);
-	}
-	printf("walls\n");
-	for (i=0; i < level->lever_count; i+= 1) {
-		free(level->levers[i]);
-	}
-	printf("levers\n");
-	free(level->start);
-	printf("start\n");
-	free(level->end);
-	printf("end\n");
-	free(level);
+  for (i = 0; i < level->wall_count; i += 1) {
+    free(level->walls[i]);
+  }
+  printf("walls\n");
+  for (i = 0; i < level->lever_count; i += 1) {
+    free(level->levers[i]);
+  }
+  printf("levers\n");
+  free(level->start);
+  printf("start\n");
+  free(level->end);
+  printf("end\n");
+  free(level);
 }
 
 void parse_level(char *filename) {
@@ -193,13 +189,13 @@ void parse_level(char *filename) {
   printf("levers: %d\nwalls: %d\n", level->lever_count, level->wall_count);
 
   level->walls = calloc(level->wall_count, sizeof(Wall));
-  for (i = 0; i < level->wall_count; i += 1 ) {
-  	level->walls[i] = NULL;
+  for (i = 0; i < level->wall_count; i += 1) {
+    level->walls[i] = NULL;
   }
-  
+
   level->levers = calloc(level->lever_count, sizeof(Lever));
-  for (i = 0; i < level->lever_count; i += 1 ) {
-  	level->levers[i] = NULL;
+  for (i = 0; i < level->lever_count; i += 1) {
+    level->levers[i] = NULL;
   }
 
   build_level(level, full_path);
@@ -207,5 +203,3 @@ void parse_level(char *filename) {
 
   free(full_path);
 }
-
-

@@ -36,49 +36,40 @@ typedef enum E_Direction {
 Player *new_player();
 void destroy_player(Player *player);
 
-
-
-
-
-
-
 typedef struct S_Point {
-	int		x;
-	int		y;
+  int x;
+  int y;
 } Point;
 
-
 typedef struct S_Rectangle {
-	Point		top_left;
-	Point		bottom_right;
+  Point top_left;
+  Point bottom_right;
 } Rectangle;
 
-
 typedef struct S_Wall {
-	Rectangle	position;
+  Rectangle position;
 } Wall;
 
 typedef struct S_Start {
-	Point		position;
+  Point position;
 } Start;
 
 typedef struct S_End {
-	Point		position;
+  Point position;
 } End;
 
 typedef struct S_Lever {
-	Point		position;
-	bool		activated;
+  Point position;
+  bool activated;
 } Lever;
 
 typedef struct S_Level {
-	int			wall_count;
-	Wall**		walls;
-	int			lever_count;
-	Lever**		levers;
-	Start		*start;
-	End			*end;
+  int wall_count;
+  Wall **walls;
+  int lever_count;
+  Lever **levers;
+  Start *start;
+  End *end;
 } Level;
 
-void parse_level(char* filename);
-
+void parse_level(char *filename);
