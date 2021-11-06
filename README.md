@@ -2,6 +2,9 @@
 
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..   OR  cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ./speed
+
+
+
