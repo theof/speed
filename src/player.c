@@ -17,7 +17,7 @@ Player *new_player() {
 
 void destroy_player(Player *player) { free(player); }
 
-void draw_player(Player *player, SDL_Surface *surface) {
+void draw_player(Player *player, SDL_Surface *surface, Input *input) {
   SDL_Rect rect;
 
   rect.h = 32;
@@ -25,7 +25,9 @@ void draw_player(Player *player, SDL_Surface *surface) {
   rect.x = player->position.x;
   rect.y = player->position.y;
 
-  SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 0x00, 0xFF, 0xFF));
+  SDL_FillRect(
+      surface, &rect,
+      SDL_MapRGB(surface->format, 0xFF, 0x00, input->action ? 0xFF : 0x00));
 }
 
 void update_player(Player *player, Uint32 delta_millis, Input *input) {

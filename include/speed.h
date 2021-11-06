@@ -30,6 +30,7 @@ Input *new_input();
 void destroy_input(Input *input);
 void update_input(Input *input, SDL_Event *event);
 void detect_controlers(Input *input, SDL_Event *event);
+void try_and_find_controller(Input *input);
 
 /*
  * Player.c
@@ -50,7 +51,7 @@ typedef enum E_Direction {
 } Direction;
 Player *new_player();
 void destroy_player(Player *player);
-void draw_player(Player *player, SDL_Surface *surface);
+void draw_player(Player *player, SDL_Surface *surface, Input *input);
 void update_player(Player *player, Uint32 millis_elapsed, Input *input);
 
 typedef struct S_Point {

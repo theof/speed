@@ -1,6 +1,7 @@
 #include "speed.h"
 
-#define Sint16Max 32767
+#define Sint16Max (Sint16)32767
+#define JOYSTICK_DEADZONE 8000
 
 void handle_keydown(SDL_Keycode keycode, Input *input) {
   switch (keycode) {
@@ -62,22 +63,27 @@ void handle_button_down(Input *input, SDL_ControllerButtonEvent event) {
   }
 }
 
+float normalize_controller_axis_move_value(Sint16 value) {
+  return (float)value / (float)Sint16Max; // Normalize to -1.0 ~ 1.0
+}
+
 void handle_controller_motion(Input *input, SDL_ControllerAxisEvent event) {
   switch (event.axis) {
   case SDL_CONTROLLER_AXIS_LEFTX:
-    input->direction.x =
-        (float)event.value / (float)Sint16Max; // Normalize to -1.0 ~ 1.0
+    input->direction.x = abs(event.value) > JOYSTICK_DEADZONE
+                             ? normalize_controller_axis_move_value(event.value)
+                             : 0.0;
     break;
   case SDL_CONTROLLER_AXIS_LEFTY:
-    input->direction.y =
-        (float)event.value / (float)Sint16Max; // Normalize to -1.0 ~ 1.0
+    input->direction.y = abs(event.value) > JOYSTICK_DEADZONE
+                             ? normalize_controller_axis_move_value(event.value)
+                             : 0.0;
     break;
   }
 }
 
-void init_gamepad(Input *input,
-                  SDL_ControllerDeviceEvent controler_device_event) {
-  input->controller = SDL_GameControllerOpen(controler_device_event.which);
+void init_gamepad(Input *input, Sint32 device_id) {
+  input->controller = SDL_GameControllerOpen(device_id);
 }
 
 Input *new_input() {
@@ -97,9 +103,23 @@ void destroy_input(Input *input) {
   free(input);
 }
 
+void try_and_find_controller(Input *input) {
+  int number_of_detected_joysticks = SDL_NumJoysticks();
+  Sint16 index = 0;
+
+  while (index < number_of_detected_joysticks) {
+    if (SDL_IsGameController(index)) {
+      init_gamepad(input, index);
+      printf("[input lib] - Found a controller on index %i", index);
+      return;
+    }
+    index++;
+  }
+}
+
 void detect_controlers(Input *input, SDL_Event *event) {
   if (event->type == SDL_CONTROLLERDEVICEADDED)
-    init_gamepad(input, event->cdevice);
+    init_gamepad(input, event->cdevice.which);
 }
 
 void update_input(Input *input, SDL_Event *event) {
@@ -110,7 +130,7 @@ void update_input(Input *input, SDL_Event *event) {
   case SDL_KEYUP:
     handle_keyup(event->key.keysym.sym, input);
     break;
-  case SDL_JOYAXISMOTION:
+  case SDL_CONTROLLERAXISMOTION:
     handle_controller_motion(input, event->caxis);
     break;
   case SDL_CONTROLLERBUTTONDOWN:

@@ -10,10 +10,11 @@
 
 #define SCREEN_HEIGHT 480
 
-void draw(SDL_Window *window, SDL_Surface *screenSurface, Player *player) {
+void draw(SDL_Window *window, SDL_Surface *screenSurface, Player *player,
+          Input *input) {
   SDL_FillRect(screenSurface, NULL,
                SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-  draw_player(player, screenSurface);
+  draw_player(player, screenSurface, input);
   SDL_UpdateWindowSurface(window);
 }
 
@@ -45,6 +46,7 @@ void loop(SDL_Window *window, SDL_Surface *surface) {
   Uint32 millis_elapsed;
   bool game_is_still_running = true;
   Input *input = new_input();
+  try_and_find_controller(input);
   while (game_is_still_running) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // poll until all events are handled!
@@ -55,7 +57,7 @@ void loop(SDL_Window *window, SDL_Surface *surface) {
     new_frame_ts = SDL_GetTicks();
     millis_elapsed = new_frame_ts - last_frame_ts; // XXX might overflow
     update_player(player, millis_elapsed, input);
-    draw(window, surface, player);
+    draw(window, surface, player, input);
     last_frame_ts = new_frame_ts;
     SDL_Delay(10);
   }
@@ -68,8 +70,13 @@ int main(int argc, char *args[]) {
   SDL_Window *window = NULL;
   SDL_Surface *screenSurface = NULL;
 
-  if (SDL_Init(SDL_INIT_VIDEO || SDL_INIT_GAMECONTROLLER) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
+    return 1;
+  }
+  if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0) {
+    fprintf(stderr, "could not initialize sdl2 gamepad submodule: %s\n",
+            SDL_GetError());
     return 1;
   }
   window = SDL_CreateWindow("hello_sdl2", SDL_WINDOWPOS_UNDEFINED,
