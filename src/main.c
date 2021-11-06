@@ -2,10 +2,10 @@
 // This should display a white screen for 2 seconds
 // compile with: clang++ main.cpp -o hello_sdl2 -lSDL2
 // run with: ./hello_sdl2
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include "speed.h"
+#include <SDL2/SDL.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 #define SCREEN_WIDTH 640
 
@@ -16,7 +16,6 @@ void draw(SDL_Window *window, SDL_Surface *screenSurface) {
                SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
   SDL_UpdateWindowSurface(window);
 }
-
 
 void handle_event(SDL_Event *ev, bool *game_is_still_running) {
   switch (ev->type) {
@@ -37,8 +36,7 @@ void handle_event(SDL_Event *ev, bool *game_is_still_running) {
   }
 }
 
-
-int main(int argc, char* args[]) {
+int main(int argc, char *args[]) {
 
   parse_level("hellow.csv");
 
@@ -68,9 +66,9 @@ int main(int argc, char* args[]) {
     // update game state, draw the current frame
     draw(window, screenSurface);
     SDL_Delay(100);
-        }
+  }
 
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 0;
+  SDL_DestroyWindow(window);
+  SDL_Quit();
+  return 0;
 }
