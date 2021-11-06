@@ -10,6 +10,10 @@
 #define SCREEN_HEIGHT 480
 
 int main(int argc, char* args[]) {
+
+  parse_level("hellow.csv");
+
+
   SDL_Window* window = NULL;
   SDL_Surface* screenSurface = NULL;
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {

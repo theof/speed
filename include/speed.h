@@ -35,3 +35,49 @@ typedef enum E_Direction {
 } Direction;
 Player *new_player();
 void destroy_player(Player *player);
+
+
+
+
+
+
+
+typedef struct S_Point {
+	int		x;
+	int		y;
+} Point;
+
+
+typedef struct S_Rectangle {
+	Point		top_left;
+	Point		bottom_right;
+} Rectangle;
+
+
+typedef struct S_Wall {
+	Rectangle	position;
+} Wall;
+
+typedef struct S_Start {
+	Point		position;
+} Start;
+
+typedef struct S_End {
+	Point		position;
+} End;
+
+typedef struct S_Lever {
+	Point		position;
+} Lever;
+
+typedef struct S_Level {
+	int			wall_count;
+	Wall**		walls;
+	int			lever_count;
+	Lever**		levels;
+	Start		start;
+	End			end;
+} Level;
+
+void parse_level(char* filename);
+
