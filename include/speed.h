@@ -20,8 +20,8 @@ void destroy_vector_2d(Vector_2d *vector);
  * Player.c
  */
 typedef struct S_Player {
-  Vector_2d *position;
-  Vector_2d *speed;
+  Vector_2d position;
+  Vector_2d speed;
   bool casting;
   float cast_delta;
   float cast_speed_mod;
