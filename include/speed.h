@@ -17,7 +17,7 @@ Vector_2d *new_vector_2d(float x, float y);
 void destroy_vector_2d(Vector_2d *vector);
 
 /*
- * Player controler
+ * Player.c
  */
 typedef struct S_Player {
   Vector_2d *position;
@@ -36,6 +36,18 @@ typedef enum E_Direction {
 Player *new_player();
 void destroy_player(Player *player);
 
+/*
+ * physical_input.c
+ * abstraction layer to read human inputs
+ */
+typedef struct S_Input {
+	float left;
+	float right;
+	float bottom;
+	float up;
+	bool action;
+	float action_delta;
+} Input;
 
 
 

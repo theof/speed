@@ -13,8 +13,9 @@ include_directories(${SDL2_INCLUDE_DIRS} include)
 
 add_executable(speed
 	src/main.c
-	src/character_movement.c
 	src/vector_2d.c
 	src/level_file_parser.c
+  src/player.c
+  src/physical_input.c
 )
 target_link_libraries(speed ${SDL2_LIBRARIES})
