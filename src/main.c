@@ -65,7 +65,7 @@ void loop(SDL_Window *window, SDL_Surface *surface) {
 
 int main(int argc, char *args[]) {
 
-  parse_level("hellow.csv");
+  // parse_level("hellow.csv");
 
   SDL_Window *window = NULL;
   SDL_Surface *screenSurface = NULL;
