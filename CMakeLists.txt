@@ -17,5 +17,6 @@ add_executable(speed
 	src/level_file_parser.c
   src/player.c
   src/input.c
+  src/collisions.c
 )
 target_link_libraries(speed ${SDL2_LIBRARIES})
