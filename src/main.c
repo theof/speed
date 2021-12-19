@@ -11,10 +11,11 @@
 #define SCREEN_HEIGHT 480
 
 void draw(SDL_Window *window, SDL_Surface *screenSurface, Player *player,
-          Input *input) {
+          Input *input, Level *level) {
   SDL_FillRect(screenSurface, NULL,
                SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
   draw_player(player, screenSurface, input);
+  draw_level(level, screenSurface);
   SDL_UpdateWindowSurface(window);
 }
 
@@ -39,7 +40,7 @@ void handle_event(SDL_Event *ev, bool *game_is_still_running, Input *input) {
   update_input(input, ev);
 }
 
-void loop(SDL_Window *window, SDL_Surface *surface) {
+void loop(SDL_Window *window, SDL_Surface *surface, Level *level) {
   Player *player = new_player();
   Uint32 last_frame_ts = SDL_GetTicks();
   Uint32 new_frame_ts;
@@ -57,16 +58,16 @@ void loop(SDL_Window *window, SDL_Surface *surface) {
     new_frame_ts = SDL_GetTicks();
     millis_elapsed = new_frame_ts - last_frame_ts; // XXX might overflow
     update_player(player, millis_elapsed, input);
-    draw(window, surface, player, input);
+    draw(window, surface, player, input, level);
     last_frame_ts = new_frame_ts;
     SDL_Delay(10);
   }
+  destroy_input(input);
+  destroy_player(player);
 }
 
 int main(int argc, char *args[]) {
-
-  // parse_level("hellow.csv");
-
+  Level *level = parse_level("hellow.csv");
   SDL_Window *window = NULL;
   SDL_Surface *screenSurface = NULL;
 
@@ -88,8 +89,9 @@ int main(int argc, char *args[]) {
   }
   screenSurface = SDL_GetWindowSurface(window);
 
-  loop(window, screenSurface);
+  loop(window, screenSurface, level);
 
+  destroy_level(level);
   SDL_DestroyWindow(window);
   SDL_Quit();
   return 0;

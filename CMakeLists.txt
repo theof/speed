@@ -9,6 +9,7 @@ set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointe
 project(speed)
 
 find_package(SDL2 REQUIRED)
+set(CMAKE_BUILD_TYPE Debug)
 include_directories(${SDL2_INCLUDE_DIRS} include)
 
 add_executable(speed
@@ -17,6 +18,8 @@ add_executable(speed
 	src/level_file_parser.c
   src/player.c
   src/input.c
+  src/level.c
+  src/rectangle.c
   src/collisions.c
 )
 target_link_libraries(speed ${SDL2_LIBRARIES})

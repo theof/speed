@@ -3,3 +3,9 @@ build
 compile_commands.json
 .cache
 .vscode
+
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+speed

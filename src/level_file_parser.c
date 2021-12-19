@@ -60,11 +60,6 @@ Wall *build_wall(char *line) {
   rectangle.bottom_right = point;
 
   wall->position = rectangle;
-
-  printf("Wall (%d,%d), (%d,%d)\n", wall->position.top_left.y,
-         wall->position.top_left.x, wall->position.bottom_right.y,
-         wall->position.bottom_right.x);
-
   return wall;
 }
 
@@ -75,7 +70,6 @@ void add_wall(Wall *wall, Level *level) {
     i += 1;
   }
   level->walls[i] = wall;
-  printf("Added wall #%d\n", i);
 }
 
 Lever *build_lever(char *line) {
@@ -87,8 +81,6 @@ Lever *build_lever(char *line) {
   lever->position = point;
   lever->activated = false;
 
-  printf("Lever (%d,%d) on:%s\n", lever->position.y, lever->position.x,
-         lever->activated ? "true" : "false");
   return lever;
 }
 
@@ -99,7 +91,6 @@ void add_lever(Lever *lever, Level *level) {
     i += 1;
   }
   level->levers[i] = lever;
-  printf("Added lever #%d\n", i);
 }
 
 End *build_end(char *line) {
@@ -110,7 +101,6 @@ End *build_end(char *line) {
   point.y = atoi(strtok(NULL, ","));
   end->position = point;
 
-  printf("End (%d,%d)\n", end->position.x, end->position.y);
   return end;
 }
 
@@ -124,7 +114,6 @@ Start *build_start(char *line) {
   point.y = atoi(strtok(NULL, ","));
   start->position = point;
 
-  printf("Start (%d,%d)\n", start->position.x, start->position.y);
   return start;
 }
 
@@ -138,7 +127,6 @@ void build_level(Level *level, char *full_path) {
 
   fptr = open_csv(full_path);
   while ((read = getline(&line, &len, fptr)) != -1) {
-    printf("building: %s", line);
 
     if (strstr(line, "wall") != NULL) {
       add_wall(build_wall(line), level);
@@ -162,31 +150,26 @@ void destroy_level(Level *level) {
   for (i = 0; i < level->wall_count; i += 1) {
     free(level->walls[i]);
   }
-  printf("walls\n");
+  free(level->walls);
   for (i = 0; i < level->lever_count; i += 1) {
     free(level->levers[i]);
   }
-  printf("levers\n");
+  free(level->levers);
   free(level->start);
-  printf("start\n");
   free(level->end);
-  printf("end\n");
   free(level);
 }
 
-void parse_level(char *filename) {
+Level *parse_level(char *filename) {
   char *full_path = malloc(strlen(BASE_PATH) + strlen(filename) + 1);
   int i;
 
   strcpy(full_path, BASE_PATH);
   strcat(full_path, filename);
-  printf("reading level: %s\n", full_path);
 
   Level *level = malloc(sizeof(Level));
   level->wall_count = get_object_count(full_path, "#wall");
   level->lever_count = get_object_count(full_path, "#lever");
-
-  printf("levers: %d\nwalls: %d\n", level->lever_count, level->wall_count);
 
   level->walls = calloc(level->wall_count, sizeof(Wall));
   for (i = 0; i < level->wall_count; i += 1) {
@@ -199,7 +182,6 @@ void parse_level(char *filename) {
   }
 
   build_level(level, full_path);
-  destroy_level(level);
-
   free(full_path);
+  return level;
 }

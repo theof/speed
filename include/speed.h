@@ -55,8 +55,8 @@ void draw_player(Player *player, SDL_Surface *surface, Input *input);
 void update_player(Player *player, Uint32 millis_elapsed, Input *input);
 
 typedef struct S_Point {
-  int x;
-  int y;
+  float x;
+  float y;
 } Point;
 
 typedef struct S_Rectangle {
@@ -91,4 +91,15 @@ typedef struct S_Level {
   End *end;
 } Level;
 
-void parse_level(char *filename);
+Level *parse_level(char *filename);
+void destroy_level(Level *level);
+
+/*
+ * level.c
+ */
+void draw_level(Level *level, SDL_Surface *surface);
+
+/*
+ * retangle.c
+ */
+Point get_hw_from_rectangle(Rectangle *rectangle);
