@@ -6,17 +6,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define SCREEN_WIDTH 640
-
-#define SCREEN_HEIGHT 480
-
-void draw(SDL_Window *window, SDL_Surface *screenSurface, Player *player,
-          Input *input, Level *level) {
-  SDL_FillRect(screenSurface, NULL,
-               SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-  draw_player(player, screenSurface, input);
-  draw_level(level, screenSurface);
-  SDL_UpdateWindowSurface(window);
+void draw(State *s) {
+  SDL_FillRect(s->surface, NULL,
+               SDL_MapRGB(s->surface->format, 0xFF, 0xFF, 0xFF));
+  draw_player(s->player, s->surface, s->input);
+  draw_level(s->level, s->surface);
+  SDL_UpdateWindowSurface(s->window);
 }
 
 void handle_event(SDL_Event *ev, bool *game_is_still_running, Input *input) {
@@ -40,16 +35,15 @@ void handle_event(SDL_Event *ev, bool *game_is_still_running, Input *input) {
   update_input(input, ev);
 }
 
-void loop(SDL_Window *window, SDL_Surface *surface, Level *level) {
-  Player *player = new_player();
-  Uint32 last_frame_ts = SDL_GetTicks();
-  Uint32 new_frame_ts;
-  Uint32 millis_elapsed;
+void loop(State *s) {
+  EngineTimers *engine_timers = s->engine_timers;
+  Player *player = s->player;
+  Level *level = s->level;
   bool game_is_still_running = true;
-  Input *input = new_input();
 
-  try_and_find_controller(input);
-  if (level->start != NULL)
+  engine_timers->last_frame_ts = SDL_GetTicks();
+  try_and_find_controller(s->input);
+  if (s->level->start != NULL)
   {
     player->position.x = level->start->position.x;
     player->position.y = level->start->position.y;
@@ -57,49 +51,22 @@ void loop(SDL_Window *window, SDL_Surface *surface, Level *level) {
   while (game_is_still_running) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // poll until all events are handled!
-      handle_event(&event, &game_is_still_running, input);
+      handle_event(&event, &game_is_still_running, s->input);
     }
 
-    // update game state, draw the current frame
-    new_frame_ts = SDL_GetTicks();
-    millis_elapsed = new_frame_ts - last_frame_ts; // XXX might overflow
-    update_player(player, millis_elapsed, input);
-    draw(window, surface, player, input, level);
-    last_frame_ts = new_frame_ts;
+    // update game s, draw the current frame
+    engine_timers->new_frame_ts = SDL_GetTicks();
+    engine_timers->millis_elapsed = engine_timers->new_frame_ts - engine_timers->last_frame_ts; // XXX might overflow
+    update_player(player, engine_timers->millis_elapsed, s->input);
+    draw(s);
+    engine_timers->last_frame_ts = engine_timers->new_frame_ts;
     SDL_Delay(10);
   }
-  destroy_input(input);
-  destroy_player(player);
 }
 
 int main(int argc, char *args[]) {
-  Level *level = parse_level("hellow.csv");
-
-  SDL_Window *window = NULL;
-  SDL_Surface *screenSurface = NULL;
-
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
-    return 1;
-  }
-  if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0) {
-    fprintf(stderr, "could not initialize sdl2 gamepad submodule: %s\n",
-            SDL_GetError());
-    return 1;
-  }
-  window = SDL_CreateWindow("hello_sdl2", SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                            SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-  if (window == NULL) {
-    fprintf(stderr, "could not create window: %s\n", SDL_GetError());
-    return 1;
-  }
-  screenSurface = SDL_GetWindowSurface(window);
-
-  loop(window, screenSurface, level);
-
-  destroy_level(level);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
+  State *s = init_state();
+  loop(s);
+  destroy_state(s);
   return 0;
 }

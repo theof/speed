@@ -21,5 +21,7 @@ add_executable(speed
   src/level.c
   src/rectangle.c
   src/collisions.c
+  src/engine_timers.c
+  src/state.c
 )
 target_link_libraries(speed ${SDL2_LIBRARIES})

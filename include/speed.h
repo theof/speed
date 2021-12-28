@@ -1,10 +1,21 @@
 #pragma once
 #include "SDL_stdinc.h"
-#define SPEED 42
+
+#define SPEED 42 // TODO - Do we actually use this ?
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
 
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <stdlib.h>
+
+typedef struct S_EngineTimers {
+  Uint32 last_frame_ts;
+  Uint32 new_frame_ts;
+  Uint32 millis_elapsed;
+} EngineTimers;
+EngineTimers *new_engine_timers();
+void destroy_engine_timers(EngineTimers *engine_timers);
 
 /*
  * A simple utility type that contains two point
@@ -103,3 +114,14 @@ void draw_level(Level *level, SDL_Surface *surface);
  * retangle.c
  */
 Point get_hw_from_rectangle(Rectangle *rectangle);
+
+typedef struct S_State {
+  Level *level;
+  Input *input;
+  SDL_Window *window;
+  SDL_Surface *surface;
+  Player *player;
+  EngineTimers *engine_timers;
+} State;
+State *init_state();
+void destroy_state(State* state);
