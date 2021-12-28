@@ -1,7 +1,6 @@
 #pragma once
 #include "SDL_stdinc.h"
 
-#define SPEED 42 // TODO - Do we actually use this ?
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
