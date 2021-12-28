@@ -1,0 +1,7 @@
+Asks for @theof and @tlebrize
+- Should we put everything in a common gamestate structure, I'm tired passing around 594 quadrillion structs to all the core functions
+
+Asks for @tlebrize
+- we got to choose if we keep Point or Vector2D as our main x.y struct, it made sense before since the level data was stored as `int`s but it ain't anymore
+- why is the wall->position variable named that way ? It literally holds a Rectangle struct, should'nt we reconsider this naming ?
+- In the test .csv you provided with the parser, the #Start value is defined using 4 values, even tho we only use 2 in the end run, this intentional ?
