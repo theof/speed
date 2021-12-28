@@ -47,7 +47,13 @@ void loop(SDL_Window *window, SDL_Surface *surface, Level *level) {
   Uint32 millis_elapsed;
   bool game_is_still_running = true;
   Input *input = new_input();
+
   try_and_find_controller(input);
+  if (level->start != NULL)
+  {
+    player->position.x = level->start->position.x;
+    player->position.y = level->start->position.y;
+  }
   while (game_is_still_running) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // poll until all events are handled!
@@ -68,6 +74,7 @@ void loop(SDL_Window *window, SDL_Surface *surface, Level *level) {
 
 int main(int argc, char *args[]) {
   Level *level = parse_level("hellow.csv");
+
   SDL_Window *window = NULL;
   SDL_Surface *screenSurface = NULL;
 
