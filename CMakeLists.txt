@@ -25,7 +25,6 @@ add_executable(speed
   src/input.c
   src/level.c
   src/rectangle.c
-  src/collisions.c
   src/engine_timers.c
   src/state.c
   src/rigidbody.c
