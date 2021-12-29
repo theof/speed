@@ -27,7 +27,8 @@ add_executable(speed
   src/rectangle.c
   src/engine_timers.c
   src/state.c
+    src/state/rigidbody_list.c
   src/rigidbody.c
   src/rigidbody_list.c
 )
-target_link_libraries(speed ${SDL2_LIBRARIES})
+target_link_libraries(speed ${SDL2_LIBRARIES} m)

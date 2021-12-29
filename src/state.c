@@ -100,5 +100,9 @@ State *init_state() {
   s->input = new_input();
   s->engine_timers = new_engine_timers();
   s->rigidbody_list = build_rigidbody_list_from_level_walls(s);
+  if (s->rigidbody_list != NULL) {
+    s->rigidbody_list = add_member_to_start_of_list(
+        s->rigidbody_list, s->player->definition, 0.0, true);
+  }
   return s;
 }

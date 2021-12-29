@@ -44,8 +44,7 @@ void loop(State *s) {
   engine_timers->last_frame_ts = SDL_GetTicks();
   try_and_find_controller(s->input);
   if (level->start != NULL) {
-    set_rectangle_position(s->player->definition, level->start->position->x,
-                           level->start->position->y);
+    set_rectangle_position(s->player->definition, level->start->position);
   }
   while (game_is_still_running) {
     SDL_Event event;
@@ -59,6 +58,7 @@ void loop(State *s) {
         engine_timers->new_frame_ts -
         engine_timers->last_frame_ts; // XXX might overflow
     update_player(player, engine_timers->millis_elapsed, s->input);
+    compute_rigid_body_list_tick(s);
     draw(s);
     engine_timers->last_frame_ts = engine_timers->new_frame_ts;
     SDL_Delay(10);

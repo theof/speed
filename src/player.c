@@ -31,7 +31,13 @@ void draw_player(Player *player, SDL_Surface *surface, Input *input) {
 }
 
 void update_player(Player *player, Uint32 delta_millis, Input *input) {
-  // disabled for now
+  Vector_2d desired_position;
+
+  desired_position.x = player->definition->top_left->x +
+                       (0.3 * input->direction.x * delta_millis);
+  desired_position.y = player->definition->top_left->y +
+                       (0.3 * input->direction.y * delta_millis);
+  set_rectangle_position(player->definition, &desired_position);
 }
 
 // void _apply_cast(Direction direction) {

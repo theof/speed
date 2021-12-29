@@ -21,16 +21,16 @@ void destroy_rectangle(Rectangle *rectangle) {
 Vector_2d get_hw_from_rectangle(Rectangle *rectangle) {
   Vector_2d point;
 
-  point.x = rectangle->bottom_right->y - rectangle->top_left->y;
-  point.y = rectangle->bottom_right->x - rectangle->top_left->x;
+  point.x = roundf(rectangle->bottom_right->y - rectangle->top_left->y);
+  point.y = roundf(rectangle->bottom_right->x - rectangle->top_left->x);
   return point;
 }
 
-void set_rectangle_position(Rectangle *rectangle, float x, float y) {
+void set_rectangle_position(Rectangle *rectangle, Vector_2d *desired_position) {
   Vector_2d hw = get_hw_from_rectangle(rectangle);
 
-  rectangle->top_left->x = x;
-  rectangle->top_left->y = y;
-  rectangle->bottom_right->x = x + hw.x;
-  rectangle->bottom_right->y = y + hw.y;
+  rectangle->top_left->x = desired_position->x;
+  rectangle->top_left->y = desired_position->y;
+  rectangle->bottom_right->x = desired_position->x + hw.x;
+  rectangle->bottom_right->y = desired_position->y + hw.y;
 }

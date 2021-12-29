@@ -5,6 +5,7 @@
 #define SCREEN_HEIGHT 480
 
 #include <SDL2/SDL.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,7 +56,7 @@ Rectangle *new_rectangle(float x1, float y1, float x2, float y2);
 Rectangle *new_empty_rectangle();
 void destroy_rectangle(Rectangle *rectangle);
 Vector_2d get_hw_from_rectangle(Rectangle *rectangle);
-void set_rectangle_position(Rectangle *rectangle, float x, float y);
+void set_rectangle_position(Rectangle *rectangle, Vector_2d *desired_position);
 
 /*
  * level entities
@@ -128,6 +129,8 @@ typedef struct S_Rigidbody {
 Rigidbody *new_rigidbody(Rectangle *target_rectangle, float weight,
                          bool can_move);
 void destroy_rigidbody(Rigidbody *target);
+bool rigidbodies_intersects(Rigidbody *r1, Rigidbody *r2);
+Vector_2d get_rigibdoby_intersection_normal(Rigidbody *r1, Rigidbody *r2);
 
 typedef struct S_Rigidbody_List {
   Rigidbody *rigidbody;
@@ -162,6 +165,7 @@ void destroy_player(Player *player);
 void draw_player(Player *player, SDL_Surface *surface, Input *input);
 void update_player(Player *player, Uint32 millis_elapsed, Input *input);
 
+// State.c
 typedef struct S_State {
   Level *level;
   Input *input;
@@ -173,3 +177,6 @@ typedef struct S_State {
 } State;
 State *init_state();
 void destroy_state(State *state);
+
+// state/rigidbody_list.c
+void compute_rigid_body_list_tick(State *s);
