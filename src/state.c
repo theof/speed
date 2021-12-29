@@ -2,18 +2,19 @@
 
 // Initializes a fresh state with neutral values
 State *new_state() {
-  State *s = (State*)malloc(sizeof(State));
+  State *s = (State *)malloc(sizeof(State));
 
-  s->input=NULL;
-  s->level=NULL;
-  s->player=NULL;
-  s->surface=NULL;
-  s->engine_timers=NULL;
-  s->window=NULL;
+  s->input = NULL;
+  s->level = NULL;
+  s->player = NULL;
+  s->surface = NULL;
+  s->engine_timers = NULL;
+  s->window = NULL;
+  s->rigidbody_list = NULL;
   return s;
 }
 
-void destroy_state(State* s) {
+void destroy_state(State *s) {
   if (s->input != NULL)
     destroy_input(s->input);
   if (s->level != NULL)
@@ -26,17 +27,19 @@ void destroy_state(State* s) {
     SDL_DestroyWindow(s->window);
   if (s->engine_timers != NULL)
     destroy_engine_timers(s->engine_timers);
+  if (s->rigidbody_list != NULL)
+    destroy_rigidbody_list(s->rigidbody_list);
   free(s);
   SDL_Quit();
 }
 
-void gracefully_abort_s_creation_and_exit(State* s, int errcode) {
+void gracefully_abort_s_creation_and_exit(State *s, int errcode) {
   destroy_state(s);
   exit(errcode);
 }
 
 void init_SDL_systems(State *s) {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
     gracefully_abort_s_creation_and_exit(s, 1);
   }
@@ -47,18 +50,18 @@ void init_SDL_systems(State *s) {
   }
 }
 
-SDL_Window* new_SDL_window(State *s) {
+SDL_Window *new_SDL_window(State *s) {
   SDL_Window *window = SDL_CreateWindow("hello_sdl2", SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                            SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+                                        SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                                        SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
   if (window == NULL) {
     fprintf(stderr, "could not create window: %s\n", SDL_GetError());
     gracefully_abort_s_creation_and_exit(s, 1);
-  }                         
+  }
   return window;
 }
 
-SDL_Surface* new_SDL_surface(State *s) {
+SDL_Surface *new_SDL_surface(State *s) {
   SDL_Surface *surface = SDL_GetWindowSurface(s->window);
 
   if (surface == NULL) {
@@ -66,6 +69,24 @@ SDL_Surface* new_SDL_surface(State *s) {
     gracefully_abort_s_creation_and_exit(s, 1);
   }
   return surface;
+}
+
+Rigidbody_List *build_rigidbody_list_from_level_walls(State *s) {
+  Level *l = s->level;
+  Rigidbody_List *rigidbody_list;
+
+  if (l->wall_count == 0)
+    return NULL;
+  else {
+    rigidbody_list = new_rigidbody_list();
+    rigidbody_list->rigidbody =
+        new_rigidbody(l->walls[0]->definition, 0.0, false);
+    for (int i = 1; i < l->wall_count; i++) {
+      rigidbody_list = add_member_to_start_of_list(
+          rigidbody_list, l->walls[i]->definition, 0.0, false);
+    }
+  }
+  return rigidbody_list;
 }
 
 State *init_state() {
@@ -78,5 +99,6 @@ State *init_state() {
   s->player = new_player();
   s->input = new_input();
   s->engine_timers = new_engine_timers();
+  s->rigidbody_list = build_rigidbody_list_from_level_walls(s);
   return s;
 }

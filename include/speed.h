@@ -55,6 +55,7 @@ Rectangle *new_rectangle(float x1, float y1, float x2, float y2);
 Rectangle *new_empty_rectangle();
 void destroy_rectangle(Rectangle *rectangle);
 Vector_2d get_hw_from_rectangle(Rectangle *rectangle);
+void set_rectangle_position(Rectangle *rectangle, float x, float y);
 
 /*
  * level entities
@@ -120,24 +121,26 @@ void destroy_lever(Lever *lever);
 typedef struct S_Rigidbody {
   Rectangle *definition;
   float weight;
+  bool can_move;
   Vector_2d *acceleration;
   Vector_2d *speed;
 } Rigidbody;
-Rigidbody *new_rigidbody(Rectangle *target_rectangle, float weight);
+Rigidbody *new_rigidbody(Rectangle *target_rectangle, float weight,
+                         bool can_move);
 void destroy_rigidbody(Rigidbody *target);
 
 typedef struct S_Rigidbody_List {
-  Rigidbody *rigid_body;
+  Rigidbody *rigidbody;
   struct S_Rigidbody_List *next;
   struct S_Rigidbody_List *prev;
 } Rigidbody_List;
 Rigidbody_List *new_rigidbody_list();
 Rigidbody_List *add_member_to_end_of_list(Rigidbody_List *start,
                                           Rectangle *target_rectangle,
-                                          float weight);
+                                          float weight, bool can_move);
 Rigidbody_List *add_member_to_start_of_list(Rigidbody_List *start,
                                             Rectangle *target_rectangle,
-                                            float weight);
+                                            float weight, bool can_move);
 void remove_member_from_list(Rigidbody_List *target_member);
 void destroy_rigidbody_list(Rigidbody_List *start);
 
@@ -166,6 +169,7 @@ typedef struct S_State {
   SDL_Surface *surface;
   Player *player;
   EngineTimers *engine_timers;
+  Rigidbody_List *rigidbody_list;
 } State;
 State *init_state();
 void destroy_state(State *state);

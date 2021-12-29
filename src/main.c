@@ -43,7 +43,10 @@ void loop(State *s) {
 
   engine_timers->last_frame_ts = SDL_GetTicks();
   try_and_find_controller(s->input);
-  // TODO shorthand to move a rectangle to a position and move the player to the start
+  if (level->start != NULL) {
+    set_rectangle_position(s->player->definition, level->start->position->x,
+                           level->start->position->y);
+  }
   while (game_is_still_running) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // poll until all events are handled!
@@ -52,7 +55,9 @@ void loop(State *s) {
 
     // update game s, draw the current frame
     engine_timers->new_frame_ts = SDL_GetTicks();
-    engine_timers->millis_elapsed = engine_timers->new_frame_ts - engine_timers->last_frame_ts; // XXX might overflow
+    engine_timers->millis_elapsed =
+        engine_timers->new_frame_ts -
+        engine_timers->last_frame_ts; // XXX might overflow
     update_player(player, engine_timers->millis_elapsed, s->input);
     draw(s);
     engine_timers->last_frame_ts = engine_timers->new_frame_ts;
