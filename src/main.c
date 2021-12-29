@@ -43,11 +43,7 @@ void loop(State *s) {
 
   engine_timers->last_frame_ts = SDL_GetTicks();
   try_and_find_controller(s->input);
-  if (s->level->start != NULL)
-  {
-    player->position.x = level->start->position.x;
-    player->position.y = level->start->position.y;
-  }
+  // TODO shorthand to move a rectangle to a position and move the player to the start
   while (game_is_still_running) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // poll until all events are handled!

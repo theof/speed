@@ -1,6 +1,13 @@
 #include "speed.h"
 
-// float vec2_distance(Vector_2d vec1, Vector_2d vec2) {
-//   return sqrt((pow(vec2.x, 2) - pow(vec1.x, 2)) +
-//               (pow(vec2.y, 2) - pow(vec1.y, 2)));
-// }
+Vector_2d *new_vector_2d(float x, float y) {
+  Vector_2d *vector_2d = (Vector_2d*)malloc(sizeof(Vector_2d));
+
+  vector_2d->x = x;
+  vector_2d->y = y;
+  return vector_2d;
+}
+
+void destroy_vector_2d(Vector_2d* vector) {
+  free(vector);
+}

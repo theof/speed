@@ -15,7 +15,12 @@ include_directories(${SDL2_INCLUDE_DIRS} include)
 add_executable(speed
   src/main.c
 	src/vector_2d.c
-	src/level_file_parser.c
+	src/level.c
+    src/level/parser.c
+      src/level/entities/wall.c
+      src/level/entities/lever.c
+      src/level/entities/end.c
+      src/level/entities/start.c
   src/player.c
   src/input.c
   src/level.c
@@ -23,5 +28,7 @@ add_executable(speed
   src/collisions.c
   src/engine_timers.c
   src/state.c
+  src/rigidbody.c
+  src/rigidbody_list.c
 )
 target_link_libraries(speed ${SDL2_LIBRARIES})
