@@ -14,26 +14,24 @@ Rigidbody_List *new_rigidbody_list() {
 // Binds it correctly
 // Then returns said created members pointer
 Rigidbody_List *add_member_to_end_of_list(Rigidbody_List *start,
-                                          Rectangle *target_rectangle,
-                                          float weight, bool can_move) {
+                                          Rectangle *target_rectangle) {
   Rigidbody_List *swp = start;
 
   while (swp->next != NULL)
     swp = swp->next;
   swp->next = new_rigidbody_list();
   swp->next->prev = swp;
-  swp->next->rigidbody = new_rigidbody(target_rectangle, weight, can_move);
+  swp->next->rigidbody = new_rigidbody(target_rectangle);
   return swp->next;
 }
 
 // Adds a new member to the start of the list
 // Returns the new start
 Rigidbody_List *add_member_to_start_of_list(Rigidbody_List *start,
-                                            Rectangle *target_rectangle,
-                                            float weight, bool can_move) {
+                                            Rectangle *target_rectangle) {
   start->prev = new_rigidbody_list();
   start->prev->next = start;
-  start->prev->rigidbody = new_rigidbody(target_rectangle, weight, can_move);
+  start->prev->rigidbody = new_rigidbody(target_rectangle);
   return start->prev;
 }
 

@@ -2,14 +2,14 @@
 
 // Link the target rectangle to a rigidbody, this rectangle won't be freed when
 // the rigidbody is destroyed
-Rigidbody *new_rigidbody(Rectangle *target_rectangle, float weight,
-                         bool can_move) {
+Rigidbody *new_rigidbody(Rectangle *target_rectangle) {
   Rigidbody *rigidbody = (Rigidbody *)malloc(sizeof(Rigidbody));
 
-  rigidbody->acceleration = new_vector_2d(0.0, 0.0); // Unused for now
-  rigidbody->speed = new_vector_2d(0.0, 0.0);
-  rigidbody->weight = weight;
-  rigidbody->can_move = can_move;
+  rigidbody->acceleration = new_vector_2d(0.0f, 0.0f); // Unused for now
+  rigidbody->speed = new_vector_2d(0.0f, 0.0f);
+  rigidbody->energy_retain = 0.0f;
+  rigidbody->weight = 0.0f;
+  rigidbody->can_move = false;
   rigidbody->definition = target_rectangle;
   rigidbody->last_definition = clone_rectangle(target_rectangle);
   return rigidbody;

@@ -79,11 +79,10 @@ Rigidbody_List *build_rigidbody_list_from_level_walls(State *s) {
     return NULL;
   else {
     rigidbody_list = new_rigidbody_list();
-    rigidbody_list->rigidbody =
-        new_rigidbody(l->walls[0]->definition, 0.0, false);
+    rigidbody_list->rigidbody = new_rigidbody(l->walls[0]->definition);
     for (int i = 1; i < l->wall_count; i++) {
-      rigidbody_list = add_member_to_start_of_list(
-          rigidbody_list, l->walls[i]->definition, 0.0, false);
+      rigidbody_list =
+          add_member_to_start_of_list(rigidbody_list, l->walls[i]->definition);
     }
   }
   return rigidbody_list;
@@ -101,9 +100,10 @@ State *init_state() {
   s->engine_timers = new_engine_timers();
   s->rigidbody_list = build_rigidbody_list_from_level_walls(s);
   if (s->rigidbody_list != NULL) {
-    s->rigidbody_list = add_member_to_start_of_list(
-        s->rigidbody_list, s->player->definition, 0.0, true);
+    s->rigidbody_list =
+        add_member_to_start_of_list(s->rigidbody_list, s->player->definition);
     link_rigidbody_to_player(s->player, s->rigidbody_list->rigidbody);
+    s->rigidbody_list->rigidbody->can_move = true;
   }
   return s;
 }

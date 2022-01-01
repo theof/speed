@@ -125,13 +125,13 @@ void destroy_lever(Lever *lever);
 typedef struct S_Rigidbody {
   Rectangle *last_definition;
   Rectangle *definition;
+  Vector_2d *acceleration; // Unused for now :think:
+  Vector_2d *speed;
+  float energy_retain;
   float weight;
   bool can_move;
-  Vector_2d *acceleration;
-  Vector_2d *speed;
 } Rigidbody;
-Rigidbody *new_rigidbody(Rectangle *target_rectangle, float weight,
-                         bool can_move);
+Rigidbody *new_rigidbody(Rectangle *target_rectangle);
 void destroy_rigidbody(Rigidbody *target);
 void rigidbody_update_definitions_from_speed(Rigidbody *rigidbody);
 
@@ -142,11 +142,9 @@ typedef struct S_Rigidbody_List {
 } Rigidbody_List;
 Rigidbody_List *new_rigidbody_list();
 Rigidbody_List *add_member_to_end_of_list(Rigidbody_List *start,
-                                          Rectangle *target_rectangle,
-                                          float weight, bool can_move);
+                                          Rectangle *target_rectangle);
 Rigidbody_List *add_member_to_start_of_list(Rigidbody_List *start,
-                                            Rectangle *target_rectangle,
-                                            float weight, bool can_move);
+                                            Rectangle *target_rectangle);
 void remove_member_from_list(Rigidbody_List *target_member);
 void destroy_rigidbody_list(Rigidbody_List *start);
 
