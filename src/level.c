@@ -5,10 +5,10 @@ void draw_level(Level *level, SDL_Surface *surface) {
   for (int index = 0; index < level->wall_count; index++) {
     Wall *wall = level->walls[index];
     SDL_Rect sdl_rectangle;
-    Vector_2d hw = get_hw_from_rectangle(wall->definition);
+    Vector_2d wh = get_wh_from_rectangle(wall->definition);
 
-    sdl_rectangle.h = hw.x;
-    sdl_rectangle.w = hw.y;
+    sdl_rectangle.w = wh.x;
+    sdl_rectangle.h = wh.y;
     sdl_rectangle.x = wall->definition->top_left->x;
     sdl_rectangle.y = wall->definition->top_left->y;
     SDL_FillRect(surface, &sdl_rectangle,

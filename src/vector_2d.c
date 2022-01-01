@@ -9,3 +9,12 @@ Vector_2d *new_vector_2d(float x, float y) {
 }
 
 void destroy_vector_2d(Vector_2d *vector) { free(vector); }
+
+Vector_2d add_vector_2ds(Vector_2d const *destination,
+                         Vector_2d const *source) {
+  Vector_2d result;
+
+  result.x = destination->x + source->x;
+  result.y = destination->y + source->y;
+  return result;
+}

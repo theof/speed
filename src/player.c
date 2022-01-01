@@ -8,6 +8,7 @@ Player *new_player() {
   Player *player = (Player *)malloc(sizeof(Player));
 
   player->definition = new_rectangle(0.0, 0.0, PLAYER_SIDE, PLAYER_SIDE);
+  player->rigidbody = NULL;
   return player;
 }
 
@@ -18,10 +19,10 @@ void destroy_player(Player *player) {
 
 void draw_player(Player *player, SDL_Surface *surface, Input *input) {
   SDL_Rect rect;
-  Vector_2d hw = get_hw_from_rectangle(player->definition);
+  Vector_2d wh = get_wh_from_rectangle(player->definition);
 
-  rect.h = hw.x;
-  rect.w = hw.y;
+  rect.w = wh.x;
+  rect.h = wh.y;
   rect.x = player->definition->top_left->x;
   rect.y = player->definition->top_left->y;
 
@@ -30,14 +31,14 @@ void draw_player(Player *player, SDL_Surface *surface, Input *input) {
       SDL_MapRGB(surface->format, 0xFF, 0x00, input->action ? 0xFF : 0x00));
 }
 
-void update_player(Player *player, Uint32 delta_millis, Input *input) {
-  Vector_2d desired_position;
+void link_rigidbody_to_player(Player *player, Rigidbody *rigidbody) {
+  player->rigidbody = rigidbody;
+}
 
-  desired_position.x = player->definition->top_left->x +
-                       (0.3 * input->direction.x * delta_millis);
-  desired_position.y = player->definition->top_left->y +
-                       (0.3 * input->direction.y * delta_millis);
-  set_rectangle_position(player->definition, &desired_position);
+// Rigidbody required for this operation !
+void update_player(Player *player, Uint32 delta_millis, Input *input) {
+  player->rigidbody->speed->x = 0.3 * input->direction.x * delta_millis;
+  player->rigidbody->speed->y = 0.3 * input->direction.y * delta_millis;
 }
 
 // void _apply_cast(Direction direction) {

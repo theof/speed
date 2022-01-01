@@ -103,6 +103,7 @@ State *init_state() {
   if (s->rigidbody_list != NULL) {
     s->rigidbody_list = add_member_to_start_of_list(
         s->rigidbody_list, s->player->definition, 0.0, true);
+    link_rigidbody_to_player(s->player, s->rigidbody_list->rigidbody);
   }
   return s;
 }

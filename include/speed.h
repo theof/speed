@@ -29,6 +29,7 @@ typedef struct S_Vector_2d {
 } Vector_2d;
 Vector_2d *new_vector_2d(float x, float y);
 void destroy_vector_2d(Vector_2d *vector);
+Vector_2d add_vector_2ds(Vector_2d const *destination, Vector_2d const *source);
 
 /*
  * physical_input.c
@@ -53,9 +54,10 @@ typedef struct S_Rectangle {
   Vector_2d *bottom_right;
 } Rectangle;
 Rectangle *new_rectangle(float x1, float y1, float x2, float y2);
+Rectangle *clone_rectangle(Rectangle *source);
 Rectangle *new_empty_rectangle();
 void destroy_rectangle(Rectangle *rectangle);
-Vector_2d get_hw_from_rectangle(Rectangle *rectangle);
+Vector_2d get_wh_from_rectangle(Rectangle *rectangle);
 void set_rectangle_position(Rectangle *rectangle, Vector_2d *desired_position);
 
 /*
@@ -120,6 +122,7 @@ void add_lever(Lever *lever, Level *level);
 void destroy_lever(Lever *lever);
 
 typedef struct S_Rigidbody {
+  Rectangle *last_definition;
   Rectangle *definition;
   float weight;
   bool can_move;
@@ -129,8 +132,7 @@ typedef struct S_Rigidbody {
 Rigidbody *new_rigidbody(Rectangle *target_rectangle, float weight,
                          bool can_move);
 void destroy_rigidbody(Rigidbody *target);
-bool rigidbodies_intersects(Rigidbody *r1, Rigidbody *r2);
-Vector_2d get_rigibdoby_intersection_normal(Rigidbody *r1, Rigidbody *r2);
+void rigidbody_update_definitions_from_speed(Rigidbody *rigidbody);
 
 typedef struct S_Rigidbody_List {
   Rigidbody *rigidbody;
@@ -152,6 +154,7 @@ void destroy_rigidbody_list(Rigidbody_List *start);
  */
 typedef struct S_Player {
   Rectangle *definition;
+  Rigidbody *rigidbody;
 } Player;
 typedef enum E_Direction {
   BOTTOM,
@@ -164,6 +167,7 @@ Player *new_player();
 void destroy_player(Player *player);
 void draw_player(Player *player, SDL_Surface *surface, Input *input);
 void update_player(Player *player, Uint32 millis_elapsed, Input *input);
+void link_rigidbody_to_player(Player *player, Rigidbody *rigidbody);
 
 // State.c
 typedef struct S_State {

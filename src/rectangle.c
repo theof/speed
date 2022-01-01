@@ -9,6 +9,10 @@ Rectangle *new_rectangle(float x1, float y1, float x2, float y2) {
 }
 
 Rectangle *new_empty_rectangle() { return new_rectangle(0.0, 0.0, 0.0, 0.0); }
+Rectangle *clone_rectangle(Rectangle *source) {
+  return new_rectangle(source->top_left->x, source->top_left->y,
+                       source->bottom_right->x, source->bottom_right->y);
+}
 
 void destroy_rectangle(Rectangle *rectangle) {
   destroy_vector_2d(rectangle->top_left);
@@ -16,21 +20,21 @@ void destroy_rectangle(Rectangle *rectangle) {
   free(rectangle);
 }
 
-// h is mapped to x
-// w is mapped to y
-Vector_2d get_hw_from_rectangle(Rectangle *rectangle) {
+// w is mapped to x
+// h is mapped to y
+Vector_2d get_wh_from_rectangle(Rectangle *rectangle) {
   Vector_2d point;
 
-  point.x = roundf(rectangle->bottom_right->y - rectangle->top_left->y);
-  point.y = roundf(rectangle->bottom_right->x - rectangle->top_left->x);
+  point.x = roundf(rectangle->bottom_right->x - rectangle->top_left->x);
+  point.y = roundf(rectangle->bottom_right->y - rectangle->top_left->y);
   return point;
 }
 
 void set_rectangle_position(Rectangle *rectangle, Vector_2d *desired_position) {
-  Vector_2d hw = get_hw_from_rectangle(rectangle);
+  Vector_2d wh = get_wh_from_rectangle(rectangle);
 
   rectangle->top_left->x = desired_position->x;
   rectangle->top_left->y = desired_position->y;
-  rectangle->bottom_right->x = desired_position->x + hw.x;
-  rectangle->bottom_right->y = desired_position->y + hw.y;
+  rectangle->bottom_right->x = desired_position->x + wh.x;
+  rectangle->bottom_right->y = desired_position->y + wh.y;
 }
