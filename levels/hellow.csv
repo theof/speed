@@ -1,6 +1,6 @@
 y1, x1, y2, x2, type, description
 0, 200, 300, 225, #wall, "mur_droit"
-50, 50, 60, 60, #wall, "smoll"
+15, 15, 30, 30, #wall, "smoll"
 50, 50, 0, 0, #start
 7, 11, 7, 11, #lever
 7, 16, 7, 16, #end

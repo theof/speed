@@ -38,3 +38,10 @@ void set_rectangle_position(Rectangle *rectangle, Vector_2d *desired_position) {
   rectangle->bottom_right->x = desired_position->x + wh.x;
   rectangle->bottom_right->y = desired_position->y + wh.y;
 }
+
+bool check_rectangle_collision(Rectangle *a, Rectangle *b) {
+  return !(a->bottom_right->x < b->top_left->x ||
+           a->top_left->x > b->bottom_right->x ||
+           a->bottom_right->y < b->top_left->y ||
+           a->top_left->y > b->bottom_right->y);
+}

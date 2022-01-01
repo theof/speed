@@ -59,6 +59,7 @@ Rectangle *new_empty_rectangle();
 void destroy_rectangle(Rectangle *rectangle);
 Vector_2d get_wh_from_rectangle(Rectangle *rectangle);
 void set_rectangle_position(Rectangle *rectangle, Vector_2d *desired_position);
+bool check_rectangle_collision(Rectangle *a, Rectangle *b);
 
 /*
  * level entities
