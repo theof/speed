@@ -12,27 +12,19 @@ float resolve_colision(Rigidbody *r_a, Rigidbody *r_b) {
 
   // for x
   if (r_a->speed->x > 0.0f) {
-    // xInvEntry = b2.x - (b1.x + b1.w);
     xInvEntry = (b->top_left->x) - (a->top_left->x + a_wh.x);
-    // xInvExit = (b2.x + b2.w) - b1.x;
     xInvExit = (b->top_left->x + b_wh.x) - a->top_left->x;
   } else {
-    // xInvEntry = (b2.x + b2.w) - b1.x;
     xInvEntry = (b->top_left->x + b_wh.x) - a->top_left->x;
-    // xInvExit = b2.x - (b1.x + b1.w);
     xInvExit = (b->top_left->x) - (a->top_left->x + a_wh.x);
   }
 
   // for y
   if (r_a->speed->y > 0.0f) {
-    // yInvEntry = b2.y - (b1.y + b1.h);
     yInvEntry = b->top_left->y - (a->top_left->y + a_wh.y);
-    // yInvExit = (b2.y + b2.h) - b1.y;
     yInvExit = (b->top_left->y + b_wh.y) - a->top_left->y;
   } else {
-    // yInvEntry = (b2.y + b2.h) - b1.y;
     yInvEntry = (b->top_left->y + b_wh.y) - a->top_left->y;
-    // yInvExit = b2.y - (b1.y + b1.h);
     yInvExit = b->top_left->y - (a->top_left->y + a_wh.y);
   }
 
