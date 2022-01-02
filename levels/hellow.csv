@@ -1,6 +1,8 @@
 y1, x1, y2, x2, type, description
-0, 200, 300, 225, #wall, "mur_droit"
-15, 15, 30, 30, #wall, "smoll"
+0, 615, 480, 640, #wall, "mur-droit"
+0, 0, 25, 640, #wall, "plafond"
+455, 0, 480, 640, #wall, "sol"
+0, 0, 480, 25, #wall, "mur-gauche"
 50, 50, 0, 0, #start
 7, 11, 7, 11, #lever
 7, 16, 7, 16, #end
