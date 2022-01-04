@@ -23,8 +23,8 @@ void draw_player(Player *player, SDL_Surface *surface, Input *input) {
 
   rect.w = wh.x;
   rect.h = wh.y;
-  rect.x = player->definition->top_left->x;
-  rect.y = player->definition->top_left->y;
+  rect.x = player->definition->top_left.x;
+  rect.y = player->definition->top_left.y;
 
   SDL_FillRect(
       surface, &rect,
@@ -37,8 +37,8 @@ void link_rigidbody_to_player(Player *player, Rigidbody *rigidbody) {
 
 // Rigidbody required for this operation !
 void update_player(Player *player, Uint32 delta_millis, Input *input) {
-  player->rigidbody->speed->x = 0.3 * input->direction.x * delta_millis;
-  player->rigidbody->speed->y = 0.3 * input->direction.y * delta_millis;
+  player->rigidbody->speed.x = 0.3 * input->direction.x * delta_millis;
+  player->rigidbody->speed.y = 0.3 * input->direction.y * delta_millis;
 }
 
 // void _apply_cast(Direction direction) {

@@ -4,11 +4,11 @@ Wall *new_wall(char *line) {
   Wall *wall = malloc(sizeof(Wall));
   Rectangle *rectangle = new_empty_rectangle();
 
-  rectangle->top_left->y = atoi(strtok(line, ","));
-  rectangle->top_left->x = atoi(strtok(NULL, ","));
+  rectangle->top_left.y = atoi(strtok(line, ","));
+  rectangle->top_left.x = atoi(strtok(NULL, ","));
 
-  rectangle->bottom_right->y = atoi(strtok(NULL, ","));
-  rectangle->bottom_right->x = atoi(strtok(NULL, ","));
+  rectangle->bottom_right.y = atoi(strtok(NULL, ","));
+  rectangle->bottom_right.x = atoi(strtok(NULL, ","));
 
   wall->definition = rectangle;
   return wall;
