@@ -118,8 +118,10 @@ void swept_narrow_phase_evaluations(Rigidbody_List *current,
     float dotprod =
         (speed->x * collision.normal.y + speed->y * collision.normal.x) *
         collision.entry_time;
-    speed->x = dotprod * collision.normal.y;
-    speed->y = dotprod * collision.normal.x;
+    if (collision.normal.y != 0.0f)
+      speed->x = dotprod * collision.normal.y;
+    if (collision.normal.x != 0.0f)
+      speed->y = dotprod * collision.normal.x;
   }
 }
 
