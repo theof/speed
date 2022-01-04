@@ -29,7 +29,7 @@ typedef struct S_Vector_2d {
 } Vector_2d;
 Vector_2d *new_vector_2d(float x, float y);
 void destroy_vector_2d(Vector_2d *vector);
-Vector_2d add_vector_2ds(Vector_2d const *destination, Vector_2d const *source);
+Vector_2d add_vector_2d(Vector_2d const destination, Vector_2d const source);
 
 /*
  * physical_input.c
@@ -50,15 +50,15 @@ void try_and_find_controller(Input *input);
  * Representation of a rectangle and a bunch of utility around it
  */
 typedef struct S_Rectangle {
-  Vector_2d *top_left;
-  Vector_2d *bottom_right;
+  Vector_2d top_left;
+  Vector_2d bottom_right;
 } Rectangle;
 Rectangle *new_rectangle(float x1, float y1, float x2, float y2);
 Rectangle *clone_rectangle(Rectangle *source);
 Rectangle *new_empty_rectangle();
 void destroy_rectangle(Rectangle *rectangle);
 Vector_2d get_wh_from_rectangle(Rectangle *rectangle);
-void set_rectangle_position(Rectangle *rectangle, Vector_2d *desired_position);
+void set_rectangle_position(Rectangle *rectangle, Vector_2d desired_position);
 bool check_rectangle_collision(Rectangle *a, Rectangle *b);
 
 /*
@@ -69,15 +69,15 @@ typedef struct S_Wall {
 } Wall;
 
 typedef struct S_Start {
-  Vector_2d *position;
+  Vector_2d position;
 } Start;
 
 typedef struct S_End {
-  Vector_2d *position;
+  Vector_2d position;
 } End;
 
 typedef struct S_Lever {
-  Vector_2d *position;
+  Vector_2d position;
   bool activated;
 } Lever;
 
@@ -124,7 +124,7 @@ void destroy_lever(Lever *lever);
 
 typedef struct S_Rigidbody {
   Rectangle *definition;
-  Vector_2d *speed;
+  Vector_2d speed;
   float energy_retain; // bounce
   float weight;        // gravity
   bool can_move;

@@ -33,8 +33,8 @@ void _debug_draw_db_objects(State *s, Rigidbody_List *db_objects) {
     Vector_2d wh = get_wh_from_rectangle(pt->rigidbody->definition);
     rect.w = wh.x;
     rect.h = wh.y;
-    rect.x = pt->rigidbody->definition->top_left->x;
-    rect.y = pt->rigidbody->definition->top_left->y;
+    rect.x = pt->rigidbody->definition->top_left.x;
+    rect.y = pt->rigidbody->definition->top_left.y;
     SDL_FillRect(s->surface, &rect,
                  SDL_MapRGB(s->surface->format, 0xAA, 0xAA, 0xAA));
     pt = pt->next;

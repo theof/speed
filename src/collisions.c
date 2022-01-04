@@ -16,40 +16,40 @@ Collision_Result swept_AABB(Rigidbody *r_a, Rigidbody *r_b) {
   // find the distance between the objects on the near and far sides
 
   // for x
-  if (r_a->speed->x > 0.0f) {
-    x_inv_entry = (b->top_left->x) - (a->top_left->x + a_wh.x);
-    x_inv_exit = (b->top_left->x + b_wh.x) - a->top_left->x;
+  if (r_a->speed.x > 0.0f) {
+    x_inv_entry = (b->top_left.x) - (a->top_left.x + a_wh.x);
+    x_inv_exit = (b->top_left.x + b_wh.x) - a->top_left.x;
   } else {
-    x_inv_entry = (b->top_left->x + b_wh.x) - a->top_left->x;
-    x_inv_exit = (b->top_left->x) - (a->top_left->x + a_wh.x);
+    x_inv_entry = (b->top_left.x + b_wh.x) - a->top_left.x;
+    x_inv_exit = (b->top_left.x) - (a->top_left.x + a_wh.x);
   }
 
   // for y
-  if (r_a->speed->y > 0.0f) {
-    y_inv_entry = b->top_left->y - (a->top_left->y + a_wh.y);
-    y_inv_exit = (b->top_left->y + b_wh.y) - a->top_left->y;
+  if (r_a->speed.y > 0.0f) {
+    y_inv_entry = b->top_left.y - (a->top_left.y + a_wh.y);
+    y_inv_exit = (b->top_left.y + b_wh.y) - a->top_left.y;
   } else {
-    y_inv_entry = (b->top_left->y + b_wh.y) - a->top_left->y;
-    y_inv_exit = b->top_left->y - (a->top_left->y + a_wh.y);
+    y_inv_entry = (b->top_left.y + b_wh.y) - a->top_left.y;
+    y_inv_exit = b->top_left.y - (a->top_left.y + a_wh.y);
   }
 
   float x_entry, y_entry;
   float x_exit, y_exit;
 
-  if (r_a->speed->x == 0.0f) {
+  if (r_a->speed.x == 0.0f) {
     x_entry = -INFINITY;
     x_exit = INFINITY;
   } else {
-    x_entry = x_inv_entry / r_a->speed->x;
-    x_exit = x_inv_exit / r_a->speed->x;
+    x_entry = x_inv_entry / r_a->speed.x;
+    x_exit = x_inv_exit / r_a->speed.x;
   }
 
-  if (r_a->speed->y == 0.0f) {
+  if (r_a->speed.y == 0.0f) {
     y_entry = -INFINITY;
     y_exit = INFINITY;
   } else {
-    y_entry = y_inv_entry / r_a->speed->y;
-    y_exit = y_inv_exit / r_a->speed->y;
+    y_entry = y_inv_entry / r_a->speed.y;
+    y_exit = y_inv_exit / r_a->speed.y;
   }
 
   float entry_time = fmax(x_entry, y_entry);
@@ -89,17 +89,20 @@ Collision_Result swept_AABB(Rigidbody *r_a, Rigidbody *r_b) {
 }
 
 // Don't forgetti to free rectangle after use
-Rectangle *get_swept_broadphase_rectangle(Rigidbody *rigidbody) {
-  Vector_2d *speed = rigidbody->speed;
+Rectangle get_swept_broadphase_rectangle(Rigidbody *rigidbody) {
   Rectangle b = *rigidbody->definition;
-  Rectangle *br = new_empty_rectangle();
+  Rectangle br;
 
-  br->top_left->x = speed->x > 0 ? b.top_left->x : b.top_left->x + speed->x;
-  br->top_left->y = speed->y > 0 ? b.top_left->y : b.top_left->y + speed->y;
-  br->bottom_right->x = speed->x > 0 ? speed->x + b.bottom_right->x
-                                     : b.bottom_right->x - speed->x;
-  br->bottom_right->y = speed->y > 0 ? speed->y + b.bottom_right->y
-                                     : b.bottom_right->y - speed->y;
+  br.top_left.x =
+      rigidbody->speed.x > 0 ? b.top_left.x : b.top_left.x + rigidbody->speed.x;
+  br.top_left.y =
+      rigidbody->speed.y > 0 ? b.top_left.y : b.top_left.y + rigidbody->speed.y;
+  br.bottom_right.x = rigidbody->speed.x > 0
+                          ? rigidbody->speed.x + b.bottom_right.x
+                          : b.bottom_right.x - rigidbody->speed.x;
+  br.bottom_right.y = rigidbody->speed.y > 0
+                          ? rigidbody->speed.y + b.bottom_right.y
+                          : b.bottom_right.y - rigidbody->speed.y;
 
   return br;
 }
@@ -109,7 +112,7 @@ void swept_narrow_phase_evaluations(Rigidbody_List *current,
   Collision_Result collision = swept_AABB(current->rigidbody, pt->rigidbody);
 
   if (collision.entry_time != 1.0f) {
-    Vector_2d *speed = current->rigidbody->speed;
+    Vector_2d *speed = &current->rigidbody->speed;
     float magnitude = sqrt((speed->x * speed->x + speed->y * speed->y)) *
                       collision.entry_time;
     float dotprod =
@@ -121,14 +124,13 @@ void swept_narrow_phase_evaluations(Rigidbody_List *current,
 }
 
 void resolve_collision(Rigidbody_List *current, Rigidbody_List *pt) {
-  Rectangle *swept_broadphase_rectangle =
+  Rectangle swept_broadphase_rectangle =
       get_swept_broadphase_rectangle(current->rigidbody);
 
-  if (check_rectangle_collision(swept_broadphase_rectangle,
+  if (check_rectangle_collision(&swept_broadphase_rectangle,
                                 pt->rigidbody->definition)) {
     swept_narrow_phase_evaluations(current, pt);
   }
-  destroy_rectangle(swept_broadphase_rectangle);
 }
 
 void resolve_collision_loop(Rigidbody_List *anchor_pointer) {
