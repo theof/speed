@@ -36,7 +36,7 @@ void _debug_draw_db_objects(State *s, Rigidbody_List *db_objects) {
     rect.x = pt->rigidbody->definition->top_left->x;
     rect.y = pt->rigidbody->definition->top_left->y;
     SDL_FillRect(s->surface, &rect,
-                 SDL_MapRGB(s->surface->format, 0x00, 0x00, 0x00));
+                 SDL_MapRGB(s->surface->format, 0xAA, 0xAA, 0xAA));
     pt = pt->next;
   }
 }

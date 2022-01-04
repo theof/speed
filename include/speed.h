@@ -123,12 +123,10 @@ void add_lever(Lever *lever, Level *level);
 void destroy_lever(Lever *lever);
 
 typedef struct S_Rigidbody {
-  Rectangle *last_definition;
   Rectangle *definition;
-  Vector_2d *acceleration; // Unused for now :think:
   Vector_2d *speed;
-  float energy_retain;
-  float weight;
+  float energy_retain; // bounce
+  float weight;        // gravity
   bool can_move;
 } Rigidbody;
 Rigidbody *new_rigidbody(Rectangle *target_rectangle);
@@ -181,5 +179,8 @@ typedef struct S_State {
 State *init_state();
 void destroy_state(State *state);
 
-// state/rigidbody_list.c
+// state/pysics.c
 void compute_rigid_body_list_tick(State *s);
+
+// collisions.c
+void resolve_collision_loop(Rigidbody_List *anchor_pointer);

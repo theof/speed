@@ -5,7 +5,7 @@ typedef struct S_Collision_Result {
   float entry_time;
 } Collision_Result;
 
-Collision_Result resolve_colision(Rigidbody *r_a, Rigidbody *r_b) {
+Collision_Result swept_AABB(Rigidbody *r_a, Rigidbody *r_b) {
   Rectangle *a = r_a->definition;
   Rectangle *b = r_b->definition;
   float x_inv_entry, y_inv_entry;
@@ -106,8 +106,7 @@ Rectangle *get_swept_broadphase_rectangle(Rigidbody *rigidbody) {
 
 void swept_narrow_phase_evaluations(Rigidbody_List *current,
                                     Rigidbody_List *pt) {
-  Collision_Result collision =
-      resolve_colision(current->rigidbody, pt->rigidbody);
+  Collision_Result collision = swept_AABB(current->rigidbody, pt->rigidbody);
 
   if (collision.entry_time != 1.0f) {
     Vector_2d *speed = current->rigidbody->speed;
@@ -121,37 +120,29 @@ void swept_narrow_phase_evaluations(Rigidbody_List *current,
   }
 }
 
-void compute_rigid_body_list_tick(State *s) {
-  if (s->rigidbody_list != NULL) {
-    Rigidbody_List *current = s->rigidbody_list;
-    Rigidbody_List *pt = s->rigidbody_list->next;
+void resolve_collision(Rigidbody_List *current, Rigidbody_List *pt) {
+  Rectangle *swept_broadphase_rectangle =
+      get_swept_broadphase_rectangle(current->rigidbody);
 
-    // resolve colisions
+  if (check_rectangle_collision(swept_broadphase_rectangle,
+                                pt->rigidbody->definition)) {
+    swept_narrow_phase_evaluations(current, pt);
+  }
+  destroy_rectangle(swept_broadphase_rectangle);
+}
+
+void resolve_collision_loop(Rigidbody_List *anchor_pointer) {
+  if (anchor_pointer->rigidbody->can_move) {
+    Rigidbody_List *pt = anchor_pointer->next;
+
     while (pt != NULL) {
-      if (current->rigidbody->can_move) {
-        Rectangle *swept_broadphase_rectangle =
-            get_swept_broadphase_rectangle(current->rigidbody);
-
-        if (check_rectangle_collision(swept_broadphase_rectangle,
-                                      pt->rigidbody->definition)) {
-          swept_narrow_phase_evaluations(current, pt);
-        }
-        destroy_rectangle(swept_broadphase_rectangle);
-      } else {
-        current = pt;
-      }
+      resolve_collision(anchor_pointer, pt);
       pt = pt->next;
-      if (pt == NULL && current->next != NULL) {
-        current = current->next;
-        pt = current->next;
-      }
     }
-    current = s->rigidbody_list;
-
-    while (current != NULL) {
-      if (current->rigidbody->can_move)
-        rigidbody_update_definitions_from_speed(current->rigidbody);
-      current = current->next;
+    pt = anchor_pointer->prev;
+    while (pt != NULL) {
+      resolve_collision(anchor_pointer, pt);
+      pt = pt->prev;
     }
   }
 }

@@ -23,11 +23,12 @@ add_executable(speed
       src/level/entities/start.c
   src/player.c
   src/input.c
+  src/collisions.c
   src/level.c
   src/rectangle.c
   src/engine_timers.c
   src/state.c
-    src/state/rigidbody_list.c
+    src/state/physics.c
   src/rigidbody.c
   src/rigidbody_list.c
 )
