@@ -2,10 +2,10 @@
 
 Lever *new_lever(char *line) {
   Lever *lever = malloc(sizeof(Lever));
-  Vector_2d *point = new_vector_2d(0.0, 0.0);
+  Vector_2d point = (Vector_2d) {0., 0.};
 
-  point->y = atoi(strtok(line, ","));
-  point->x = atoi(strtok(NULL, ","));
+  point.y = atoi(strtok(line, ","));
+  point.x = atoi(strtok(NULL, ","));
   lever->position = point;
   lever->activated = false;
 
@@ -22,6 +22,5 @@ void add_lever(Lever *lever, Level *level) {
 }
 
 void destroy_lever(Lever *lever) {
-  destroy_vector_2d(lever->position);
   free(lever);
 }
