@@ -141,9 +141,9 @@ typedef struct S_Rigidbody_List {
   struct S_Rigidbody_List *prev;
 } Rigidbody_List;
 Rigidbody_List *new_rigidbody_list();
-Rigidbody_List *add_member_to_end_of_list(Rigidbody_List *start,
+Rigidbody_List *add_member_to_end_of_list(Rigidbody_List **start,
                                           Rectangle *target_rectangle);
-Rigidbody_List *add_member_to_start_of_list(Rigidbody_List *start,
+Rigidbody_List *add_member_to_start_of_list(Rigidbody_List **start,
                                             Rectangle *target_rectangle);
 void remove_member_from_list(Rigidbody_List *target_member);
 void destroy_rigidbody_list(Rigidbody_List *start);

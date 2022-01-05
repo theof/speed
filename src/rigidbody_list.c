@@ -13,26 +13,41 @@ Rigidbody_List *new_rigidbody_list() {
 // Add a new member to the list
 // Binds it correctly
 // Then returns said created members pointer
-Rigidbody_List *add_member_to_end_of_list(Rigidbody_List *start,
+Rigidbody_List *add_member_to_end_of_list(Rigidbody_List **start,
                                           Rectangle *target_rectangle) {
-  Rigidbody_List *swp = start;
+  Rigidbody_List *new = new_rigidbody_list();
+  new->rigidbody = new_rigidbody(target_rectangle);
 
-  while (swp->next != NULL)
-    swp = swp->next;
-  swp->next = new_rigidbody_list();
-  swp->next->prev = swp;
-  swp->next->rigidbody = new_rigidbody(target_rectangle);
-  return swp->next;
+  if (*start == NULL) {
+    *start = new;
+    return new;
+  }
+
+  Rigidbody_List *walk = *start;
+  while (walk->next != NULL) {
+    walk = walk->next;
+  }
+  walk->next = new;
+  new->prev = walk;
+  return new;
 }
 
 // Adds a new member to the start of the list
 // Returns the new start
-Rigidbody_List *add_member_to_start_of_list(Rigidbody_List *start,
+Rigidbody_List *add_member_to_start_of_list(Rigidbody_List **start,
                                             Rectangle *target_rectangle) {
-  start->prev = new_rigidbody_list();
-  start->prev->next = start;
-  start->prev->rigidbody = new_rigidbody(target_rectangle);
-  return start->prev;
+  Rigidbody_List *new = new_rigidbody_list();
+  new->rigidbody = new_rigidbody(target_rectangle);
+
+  if (*start == NULL) {
+    *start = new;
+    return new;
+  }
+
+  new->next = *start;
+  (*start)->prev = new;
+  *start = new;
+  return new;
 }
 
 // Frees the memory associated with the member, next and prevs still points to

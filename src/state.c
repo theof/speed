@@ -73,16 +73,13 @@ SDL_Surface *new_SDL_surface(State *s) {
 
 Rigidbody_List *build_rigidbody_list_from_level_walls(State *s) {
   Level *l = s->level;
-  Rigidbody_List *rigidbody_list;
+  Rigidbody_List *rigidbody_list = NULL;
 
   if (l->wall_count == 0)
     return NULL;
   else {
-    rigidbody_list = new_rigidbody_list();
-    rigidbody_list->rigidbody = new_rigidbody(l->walls[0]->definition);
-    for (int i = 1; i < l->wall_count; i++) {
-      rigidbody_list =
-          add_member_to_start_of_list(rigidbody_list, l->walls[i]->definition);
+    for (int i = 0; i < l->wall_count; i++) {
+      add_member_to_start_of_list(&rigidbody_list, l->walls[i]->definition);
     }
   }
   return rigidbody_list;
@@ -100,8 +97,7 @@ State *init_state() {
   s->engine_timers = new_engine_timers();
   s->rigidbody_list = build_rigidbody_list_from_level_walls(s);
   if (s->rigidbody_list != NULL) {
-    s->rigidbody_list =
-        add_member_to_start_of_list(s->rigidbody_list, s->player->definition);
+    add_member_to_start_of_list(&s->rigidbody_list, s->player->definition);
     link_rigidbody_to_player(s->player, s->rigidbody_list->rigidbody);
     s->rigidbody_list->rigidbody->can_move = true;
   }

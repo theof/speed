@@ -93,18 +93,16 @@ Rectangle *get_swept_broadphase_rectangle(Rigidbody *rigidbody) {
   Rectangle b = *rigidbody->definition;
   Rectangle *broadphase_rectangle = new_empty_rectangle();
 
-  broadphase_rectangle->top_left.x = rigidbody->speed.x > 0
-                                          ? b.top_left.x
-                                          : b.top_left.x + rigidbody->speed.x;
-  broadphase_rectangle->top_left.y = rigidbody->speed.y > 0
-                                          ? b.top_left.y
-                                          : b.top_left.y + rigidbody->speed.y;
+  broadphase_rectangle->top_left.x =
+      rigidbody->speed.x > 0 ? b.top_left.x : b.top_left.x + rigidbody->speed.x;
+  broadphase_rectangle->top_left.y =
+      rigidbody->speed.y > 0 ? b.top_left.y : b.top_left.y + rigidbody->speed.y;
   broadphase_rectangle->bottom_right.x =
       rigidbody->speed.x > 0 ? rigidbody->speed.x + b.bottom_right.x
-                              : b.bottom_right.x - rigidbody->speed.x;
+                             : b.bottom_right.x - rigidbody->speed.x;
   broadphase_rectangle->bottom_right.y =
       rigidbody->speed.y > 0 ? rigidbody->speed.y + b.bottom_right.y
-                              : b.bottom_right.y - rigidbody->speed.y;
+                             : b.bottom_right.y - rigidbody->speed.y;
 
   return broadphase_rectangle;
 }
