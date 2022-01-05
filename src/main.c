@@ -6,14 +6,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void draw(State *s) {
-  SDL_FillRect(s->surface, NULL,
-               SDL_MapRGB(s->surface->format, 0xFF, 0xFF, 0xFF));
-  draw_player(s->player, s->surface, s->input);
-  draw_level(s->level, s->surface);
-  SDL_UpdateWindowSurface(s->window);
-}
-
 void handle_event(SDL_Event *ev, bool *game_is_still_running, Input *input) {
   detect_controlers(input, ev);
   switch (ev->type) {

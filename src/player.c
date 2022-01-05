@@ -17,7 +17,7 @@ void destroy_player(Player *player) {
   free(player);
 }
 
-void draw_player(Player *player, SDL_Surface *surface, Input *input) {
+void draw_player(Player *player, SDL_Renderer *renderer, Input *input) {
   SDL_Rect rect;
   Vector_2d wh = get_wh_from_rectangle(player->definition);
 
@@ -26,9 +26,8 @@ void draw_player(Player *player, SDL_Surface *surface, Input *input) {
   rect.x = player->definition->top_left->x;
   rect.y = player->definition->top_left->y;
 
-  SDL_FillRect(
-      surface, &rect,
-      SDL_MapRGB(surface->format, 0xFF, 0x00, input->action ? 0xFF : 0x00));
+  SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, input->action ? 0xFF : 0x00, 0xFF);
+  SDL_RenderFillRect(renderer, &rect);
 }
 
 void link_rigidbody_to_player(Player *player, Rigidbody *rigidbody) {

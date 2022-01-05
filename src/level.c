@@ -1,18 +1,17 @@
 #include "speed.h"
 
-void draw_level(Level *level, SDL_Surface *surface) {
-
+void draw_level(Level *level, SDL_Renderer *renderer) {
+  SDL_SetRenderDrawColor(renderer, 0x25, 0x00, 0x35, 0xFF);
   for (int index = 0; index < level->wall_count; index++) {
     Wall *wall = level->walls[index];
-    SDL_Rect sdl_rectangle;
+    SDL_Rect rect;
     Vector_2d wh = get_wh_from_rectangle(wall->definition);
 
-    sdl_rectangle.w = wh.x;
-    sdl_rectangle.h = wh.y;
-    sdl_rectangle.x = wall->definition->top_left->x;
-    sdl_rectangle.y = wall->definition->top_left->y;
-    SDL_FillRect(surface, &sdl_rectangle,
-                 SDL_MapRGB(surface->format, 0x25, 0x00, 0x35));
+    rect.w = wh.x;
+    rect.h = wh.y;
+    rect.x = wall->definition->top_left->x;
+    rect.y = wall->definition->top_left->y;
+    SDL_RenderFillRect(renderer, &rect);
   }
 }
 

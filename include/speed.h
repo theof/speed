@@ -95,7 +95,7 @@ typedef struct S_Level {
 } Level;
 void destroy_level(Level *level);
 Level *new_level();
-void draw_level(Level *level, SDL_Surface *surface);
+void draw_level(Level *level, SDL_Renderer *renderer);
 
 /*
  * level parser.c
@@ -155,6 +155,7 @@ typedef struct S_Player {
   Rectangle *definition;
   Rigidbody *rigidbody;
 } Player;
+
 typedef enum E_Direction {
   BOTTOM,
   TOP,
@@ -162,9 +163,10 @@ typedef enum E_Direction {
   RIGHT,
   NEUTRAL,
 } Direction;
+
 Player *new_player();
 void destroy_player(Player *player);
-void draw_player(Player *player, SDL_Surface *surface, Input *input);
+void draw_player(Player *player, SDL_Renderer *renderer, Input *input);
 void update_player(Player *player, Uint32 millis_elapsed, Input *input);
 void link_rigidbody_to_player(Player *player, Rigidbody *rigidbody);
 
@@ -173,13 +175,20 @@ typedef struct S_State {
   Level *level;
   Input *input;
   SDL_Window *window;
-  SDL_Surface *surface;
+  SDL_Renderer *renderer;
   Player *player;
   EngineTimers *engine_timers;
   Rigidbody_List *rigidbody_list;
 } State;
+
 State *init_state();
 void destroy_state(State *state);
 
 // state/rigidbody_list.c
 void compute_rigid_body_list_tick(State *s);
+
+/*
+ * draw.c
+ */
+
+void draw(State *s);

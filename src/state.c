@@ -7,7 +7,7 @@ State *new_state() {
   s->input = NULL;
   s->level = NULL;
   s->player = NULL;
-  s->surface = NULL;
+  s->renderer = NULL;
   s->engine_timers = NULL;
   s->window = NULL;
   s->rigidbody_list = NULL;
@@ -21,8 +21,8 @@ void destroy_state(State *s) {
     destroy_level(s->level);
   if (s->player != NULL)
     destroy_player(s->player);
-  if (s->surface != NULL)
-    SDL_FreeSurface(s->surface);
+  if (s->renderer != NULL)
+    SDL_DestroyRenderer(s->renderer);
   if (s->window != NULL)
     SDL_DestroyWindow(s->window);
   if (s->engine_timers != NULL)
@@ -61,14 +61,14 @@ SDL_Window *new_SDL_window(State *s) {
   return window;
 }
 
-SDL_Surface *new_SDL_surface(State *s) {
-  SDL_Surface *surface = SDL_GetWindowSurface(s->window);
+SDL_Renderer *new_SDL_renderer(State *s) {
+  SDL_Renderer *renderer = SDL_CreateRenderer(s->window, -1, -0);
 
-  if (surface == NULL) {
-    fprintf(stderr, "could not create windows surface: %s\n", SDL_GetError());
+  if (renderer == NULL) {
+    fprintf(stderr, "could not create renderer: %s\n", SDL_GetError());
     gracefully_abort_s_creation_and_exit(s, 1);
   }
-  return surface;
+  return renderer;
 }
 
 Rigidbody_List *build_rigidbody_list_from_level_walls(State *s) {
@@ -93,7 +93,7 @@ State *init_state() {
 
   init_SDL_systems(s);
   s->window = new_SDL_window(s);
-  s->surface = new_SDL_surface(s);
+  s->renderer = new_SDL_renderer(s);
   s->level = parse_level("hellow.csv");
   s->player = new_player();
   s->input = new_input();
