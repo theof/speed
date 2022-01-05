@@ -7,20 +7,21 @@
 #include <stdio.h>
 
 Rigidbody_List *_debug_setup_additional_rigidbodies(State *s) {
-  float object_amount = 5.0f;
+  float object_amount = 3.0f;
   Rigidbody_List *db_object_list = NULL;
 
   for (float i = 0; i < object_amount; i += 1.0f) {
-    float start = (i + 50) * i;
+    float start = 100;
     float end = start + 5.0f;
     Rigidbody_List *new_member = add_member_to_end_of_list(
-        s->rigidbody_list, new_rectangle(start, start, end, end));
+        s->rigidbody_list, new_rectangle(start, start * i, end, end * i));
 
     if (db_object_list == NULL) {
       db_object_list = new_member;
     }
 
-    new_member->rigidbody->can_move = false;
+    new_member->rigidbody->can_move = true;
+    new_member->rigidbody->weight = 0.1f;
   }
   return db_object_list;
 }

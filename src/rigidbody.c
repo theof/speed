@@ -10,6 +10,7 @@ Rigidbody *new_rigidbody(Rectangle *target_rectangle) {
   rigidbody->weight = 0.0f;
   rigidbody->can_move = false;
   rigidbody->definition = target_rectangle;
+  rigidbody->collide_direction = COLLIDE_NONE;
   return rigidbody;
 }
 

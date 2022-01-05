@@ -21,8 +21,8 @@ void destroy_rectangle(Rectangle *rectangle) { free(rectangle); }
 Vector_2d get_wh_from_rectangle(Rectangle *rectangle) {
   Vector_2d point;
 
-  point.x = rectangle->bottom_right.x - rectangle->top_left.x;
-  point.y = rectangle->bottom_right.y - rectangle->top_left.y;
+  point.x = roundf(rectangle->bottom_right.x - rectangle->top_left.x);
+  point.y = roundf(rectangle->bottom_right.y - rectangle->top_left.y);
   return point;
 }
 

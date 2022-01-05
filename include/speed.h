@@ -122,9 +122,17 @@ Lever *new_lever(char *line);
 void add_lever(Lever *lever, Level *level);
 void destroy_lever(Lever *lever);
 
+typedef enum S_Collide_Direction {
+  COLLIDE_TOP,
+  COLLIDE_BOTTOM,
+  COLLIDE_RIGHT,
+  COLLIDE_LEFT,
+  COLLIDE_NONE,
+} Collide_Direction;
 typedef struct S_Rigidbody {
   Rectangle *definition;
   Vector_2d speed;
+  Collide_Direction collide_direction;
   float energy_retain; // bounce
   float weight;        // gravity
   bool can_move;
@@ -153,13 +161,13 @@ typedef struct S_Player {
   Rectangle *definition;
   Rigidbody *rigidbody;
 } Player;
-typedef enum E_Direction {
-  BOTTOM,
-  TOP,
-  LEFT,
-  RIGHT,
-  NEUTRAL,
-} Direction;
+typedef enum E_Cast_Direction {
+  CAST_BOTTOM,
+  CAST_TOP,
+  CAST_LEFT,
+  CAST_RIGHT,
+  CAST_NEUTRAL,
+} Cast_Direction;
 Player *new_player();
 void destroy_player(Player *player);
 void draw_player(Player *player, SDL_Surface *surface, Input *input);
@@ -184,3 +192,6 @@ void compute_rigid_body_list_tick(State *s);
 
 // collisions.c
 void resolve_collision_loop(Rigidbody_List *anchor_pointer);
+
+// gravity.c
+void apply_gravity(Rigidbody_List *rigidbody_list);

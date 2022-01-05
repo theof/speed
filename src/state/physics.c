@@ -6,6 +6,7 @@ void compute_rigid_body_list_tick(State *s) {
 
     while (pointer != NULL) {
       // Compute new speed
+      apply_gravity(pointer);
       resolve_collision_loop(pointer);
       rigidbody_update_definitions_from_speed(pointer->rigidbody);
       pointer = pointer->next;

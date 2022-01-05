@@ -24,6 +24,7 @@ add_executable(speed
   src/player.c
   src/input.c
   src/collisions.c
+  src/gravity.c
   src/level.c
   src/rectangle.c
   src/engine_timers.c
