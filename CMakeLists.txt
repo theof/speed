@@ -30,5 +30,7 @@ add_executable(speed
     src/state/rigidbody_list.c
   src/rigidbody.c
   src/rigidbody_list.c
+  src/draw.c
+  src/spritesheets.c
 )
 target_link_libraries(speed ${SDL2_LIBRARIES} m)
