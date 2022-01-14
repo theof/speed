@@ -62,3 +62,13 @@ void destroy_rigidbody_list(Rigidbody_List *start) {
     swp = next;
   }
 }
+
+void reset_all_rigidbody_list_member_collisions(Rigidbody_List *start) {
+  Rigidbody_List *swp = start;
+
+  while (swp != NULL) {
+    if (swp->rigidbody->speed.x || swp->rigidbody->speed.y)
+      reset_collision_detection_values(swp->rigidbody);
+    swp = swp->next;
+  }
+}

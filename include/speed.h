@@ -122,6 +122,7 @@ Lever *new_lever(char *line);
 void add_lever(Lever *lever, Level *level);
 void destroy_lever(Lever *lever);
 
+#define COLLISION_RECTANGLE_AMOUNT 4
 typedef struct S_Collision_Direction {
   bool right;
   bool left;
@@ -142,6 +143,7 @@ Rigidbody *new_rigidbody(Rectangle *target_rectangle);
 void destroy_rigidbody(Rigidbody *target);
 void rigidbody_update_definitions_from_speed(Rigidbody *rigidbody);
 void set_border_collision_computing(bool value, Rigidbody *rigidbody);
+void reset_collision_detection_values(Rigidbody *rigidbody);
 
 typedef struct S_Rigidbody_List {
   Rigidbody *rigidbody;
@@ -155,6 +157,7 @@ Rigidbody_List *add_member_to_start_of_list(Rigidbody_List *start,
                                             Rectangle *target_rectangle);
 void remove_member_from_list(Rigidbody_List *target_member);
 void destroy_rigidbody_list(Rigidbody_List *start);
+void reset_all_rigidbody_list_member_collisions(Rigidbody_List *start);
 
 /*
  * Player.c

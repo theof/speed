@@ -127,6 +127,37 @@ void swept_narrow_phase_evaluations(Rigidbody_List *current,
   }
 }
 
+void switch_collision_side_booleans(Rigidbody_List *current,
+                                    Rigidbody_List *pt) {
+  Rigidbody *current_rb = current->rigidbody;
+  Rectangle **rectangle_array = current->rigidbody->collision_side_rectangles;
+
+  for (int i = 0; i < COLLISION_RECTANGLE_AMOUNT; i++) {
+    Rectangle cpy = *rectangle_array[i];
+
+    cpy.top_left.x += current_rb->speed.x;
+    cpy.top_left.y += current_rb->speed.y;
+    cpy.bottom_right.x += current_rb->speed.x;
+    cpy.bottom_right.y += current_rb->speed.y;
+    if (check_rectangle_collision(&cpy, pt->rigidbody->definition)) {
+      switch (i) {
+      case 0:
+        current_rb->collision_direction.top = true;
+        break;
+      case 1:
+        current_rb->collision_direction.right = true;
+        break;
+      case 2:
+        current_rb->collision_direction.bottom = true;
+        break;
+      case 3:
+        current_rb->collision_direction.left = true;
+        break;
+      }
+    }
+  }
+}
+
 void resolve_collision(Rigidbody_List *current, Rigidbody_List *pt) {
   Rectangle swept_broadphase_rectangle =
       get_swept_broadphase_rectangle(current->rigidbody);
@@ -135,6 +166,7 @@ void resolve_collision(Rigidbody_List *current, Rigidbody_List *pt) {
                                 pt->rigidbody->definition)) {
     swept_narrow_phase_evaluations(current, pt);
   }
+  switch_collision_side_booleans(current, pt);
 }
 
 void resolve_collision_loop(Rigidbody_List *anchor_pointer) {

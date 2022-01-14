@@ -17,6 +17,19 @@ void destroy_player(Player *player) {
   free(player);
 }
 
+void _debug_draw_debug_rectangle(Rectangle *rectangle, SDL_Surface *surface,
+                                 bool toggle) {
+  SDL_Rect rect;
+  Vector_2d wh = get_wh_from_rectangle(rectangle);
+
+  rect.w = wh.x;
+  rect.h = wh.y;
+  rect.x = rectangle->top_left.x;
+  rect.y = rectangle->top_left.y;
+  SDL_FillRect(surface, &rect,
+               SDL_MapRGB(surface->format, 0x00, toggle ? 0xFF : 0x44, 0x55));
+}
+
 void draw_player(Player *player, SDL_Surface *surface, Input *input) {
   SDL_Rect rect;
   Vector_2d wh = get_wh_from_rectangle(player->definition);
@@ -29,6 +42,19 @@ void draw_player(Player *player, SDL_Surface *surface, Input *input) {
   SDL_FillRect(
       surface, &rect,
       SDL_MapRGB(surface->format, 0xFF, 0x00, input->action ? 0xFF : 0x00));
+
+  _debug_draw_debug_rectangle(player->rigidbody->collision_side_rectangles[0],
+                              surface,
+                              player->rigidbody->collision_direction.top);
+  _debug_draw_debug_rectangle(player->rigidbody->collision_side_rectangles[1],
+                              surface,
+                              player->rigidbody->collision_direction.right);
+  _debug_draw_debug_rectangle(player->rigidbody->collision_side_rectangles[2],
+                              surface,
+                              player->rigidbody->collision_direction.bottom);
+  _debug_draw_debug_rectangle(player->rigidbody->collision_side_rectangles[3],
+                              surface,
+                              player->rigidbody->collision_direction.left);
 }
 
 void link_rigidbody_to_player(Player *player, Rigidbody *rigidbody) {
@@ -38,6 +64,7 @@ void link_rigidbody_to_player(Player *player, Rigidbody *rigidbody) {
 // Rigidbody required for this operation !
 void update_player(Player *player, Uint32 delta_millis, Input *input) {
   player->rigidbody->speed.x = 0.3 * input->direction.x * delta_millis;
+  player->rigidbody->speed.y = 0.3 * input->direction.y * delta_millis;
 }
 
 // void _apply_cast(Direction direction) {

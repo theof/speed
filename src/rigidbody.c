@@ -1,8 +1,7 @@
 #include "speed.h"
 
-#define COLLISION_RECTANGLE_AMOUNT 4
 // 5 px ray casting
-#define COLLISION_RECTANGLE_STREGH 5.0f;
+#define COLLISION_RECTANGLE_THICKNESS 5.0f;
 
 // Link the target rectangle to a rigidbody, this rectangle won't be freed when
 // the rigidbody is destroyed
@@ -38,29 +37,29 @@ void rigid_body_update_collision_rectangle_from_definition(
     // Define top
     target->top_left = rigidbody->definition->top_left;
     target->bottom_right = rigidbody->definition->bottom_right;
-    target->top_left.y -= COLLISION_RECTANGLE_STREGH;
-    target->bottom_right.y -= COLLISION_RECTANGLE_STREGH;
+    target->bottom_right.y = target->top_left.y;
+    target->top_left.y -= COLLISION_RECTANGLE_THICKNESS;
 
     target = rigidbody->collision_side_rectangles[1];
     // Define right
     target->top_left = rigidbody->definition->top_left;
     target->bottom_right = rigidbody->definition->bottom_right;
-    target->top_left.x += COLLISION_RECTANGLE_STREGH;
-    target->bottom_right.x += COLLISION_RECTANGLE_STREGH;
+    target->top_left.x = target->bottom_right.x;
+    target->bottom_right.x += COLLISION_RECTANGLE_THICKNESS;
 
     target = rigidbody->collision_side_rectangles[2];
     // Define bottom
     target->top_left = rigidbody->definition->top_left;
     target->bottom_right = rigidbody->definition->bottom_right;
-    target->top_left.y += COLLISION_RECTANGLE_STREGH;
-    target->bottom_right.y += COLLISION_RECTANGLE_STREGH;
+    target->top_left.y = target->bottom_right.y;
+    target->bottom_right.y += COLLISION_RECTANGLE_THICKNESS;
 
     target = rigidbody->collision_side_rectangles[3];
     // Define left
     target->top_left = rigidbody->definition->top_left;
     target->bottom_right = rigidbody->definition->bottom_right;
-    target->top_left.x -= COLLISION_RECTANGLE_STREGH;
-    target->bottom_right.x -= COLLISION_RECTANGLE_STREGH;
+    target->bottom_right.x = target->top_left.x;
+    target->top_left.x -= COLLISION_RECTANGLE_THICKNESS;
   }
 }
 
@@ -85,4 +84,8 @@ void set_border_collision_computing(bool value, Rigidbody *rigidbody) {
     rigidbody->update_collision_direction = false;
     rigidbody->collision_direction = (Collision_Direction){0};
   }
+}
+
+void reset_collision_detection_values(Rigidbody *rigidbody) {
+  rigidbody->collision_direction = (Collision_Direction){0};
 }
