@@ -22,6 +22,8 @@ Rigidbody_List *_debug_setup_additional_rigidbodies(State *s) {
 
     new_member->rigidbody->can_move = true;
     new_member->rigidbody->weight = 0.1f;
+    new_member->rigidbody->energy_retain = 0.5f;
+    set_border_collision_computing(true, new_member->rigidbody);
   }
   return db_object_list;
 }

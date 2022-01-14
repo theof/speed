@@ -120,21 +120,9 @@ void swept_narrow_phase_evaluations(Rigidbody_List *current,
         collision.entry_time;
     if (collision.normal.y != 0.0f) {
       speed->x = dotprod * collision.normal.y;
-      current->rigidbody->collide_direction =
-          current->rigidbody->definition->top_left.x -
-                      pt->rigidbody->definition->top_left.x >
-                  0
-              ? COLLIDE_LEFT
-              : COLLIDE_RIGHT;
     }
     if (collision.normal.x != 0.0f) {
       speed->y = dotprod * collision.normal.x;
-      current->rigidbody->collide_direction =
-          current->rigidbody->definition->top_left.y -
-                      pt->rigidbody->definition->top_left.y >
-                  0
-              ? COLLIDE_TOP
-              : COLLIDE_BOTTOM;
     }
   }
 }
@@ -146,9 +134,6 @@ void resolve_collision(Rigidbody_List *current, Rigidbody_List *pt) {
   if (check_rectangle_collision(&swept_broadphase_rectangle,
                                 pt->rigidbody->definition)) {
     swept_narrow_phase_evaluations(current, pt);
-  } else {
-    // current->rigidbody->collision_normal.x = 0.0f;
-    // current->rigidbody->collision_normal.y = 0.0f;
   }
 }
 

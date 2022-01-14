@@ -104,6 +104,9 @@ State *init_state() {
         add_member_to_start_of_list(s->rigidbody_list, s->player->definition);
     link_rigidbody_to_player(s->player, s->rigidbody_list->rigidbody);
     s->rigidbody_list->rigidbody->can_move = true;
+    s->rigidbody_list->rigidbody->weight = 0.5f;
+    s->rigidbody_list->rigidbody->energy_retain = 0.5f;
+    set_border_collision_computing(true, s->rigidbody_list->rigidbody);
   }
   return s;
 }

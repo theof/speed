@@ -122,24 +122,26 @@ Lever *new_lever(char *line);
 void add_lever(Lever *lever, Level *level);
 void destroy_lever(Lever *lever);
 
-typedef enum S_Collide_Direction {
-  COLLIDE_TOP,
-  COLLIDE_BOTTOM,
-  COLLIDE_RIGHT,
-  COLLIDE_LEFT,
-  COLLIDE_NONE,
-} Collide_Direction;
+typedef struct S_Collision_Direction {
+  bool right;
+  bool left;
+  bool top;
+  bool bottom;
+} Collision_Direction;
 typedef struct S_Rigidbody {
   Rectangle *definition;
   Vector_2d speed;
-  Collide_Direction collide_direction;
   float energy_retain; // bounce
   float weight;        // gravity
   bool can_move;
+  bool update_collision_direction;
+  Collision_Direction collision_direction;
+  Rectangle **collision_side_rectangles;
 } Rigidbody;
 Rigidbody *new_rigidbody(Rectangle *target_rectangle);
 void destroy_rigidbody(Rigidbody *target);
 void rigidbody_update_definitions_from_speed(Rigidbody *rigidbody);
+void set_border_collision_computing(bool value, Rigidbody *rigidbody);
 
 typedef struct S_Rigidbody_List {
   Rigidbody *rigidbody;
